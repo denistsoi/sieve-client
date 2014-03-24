@@ -1,0 +1,357 @@
+body {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  color: #555;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Titles */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  color: #333;
+}
+
+
+/* Paragraph & Typographic */
+p {
+  line-height: 28px;
+  margin-bottom: 25px;
+}
+
+.centered {
+  text-align: center;
+}
+
+.brand {
+  padding-left: 20px;
+  padding-right: 20px;
+  max-height: 30px;
+}
+
+/* Links */
+a {
+    word-wrap: break-word;
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+a:hover,
+a:focus {
+    outline: 0;
+}
+
+a:before,
+a:after {
+    -webkit-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -moz-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -ms-transition: color 0.1s ease-in, background 0.1s ease-in;
+    -o-transition: color 0.1s ease-in, background 0.1s ease-in;
+    transition: color 0.1s ease-in, background 0.1s ease-in;
+}
+
+hr {
+  display: block;
+  height: 1px;
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 1em 0;
+  padding: 0;
+}
+
+/* Vertical alignment */
+
+.fixed-60px {
+  height: 60px;
+}
+
+.valign {
+  float: none;
+  display: inline-block;
+  vertical-align: middle;
+  white-space: normal;
+}
+
+.valign-helper {
+  display: inline-block;
+  vertical-align: middle;
+  height:100%;
+}
+
+/* ==========================================================================
+   Font Awesome
+   ========================================================================== */
+
+.fa-pointer {
+  cursor: pointer;
+}
+
+.icon-pad-right {
+  padding-right: 5px;
+}
+
+.white {
+  color: white;
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+.ellipsis {
+  max-width: 50px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;  /* IE 6+, FF 7+, Op 11+, Saf 1.3+, Chr 1+ */
+  -o-text-overflow: ellipsis;  /* for Opera 9 & 10 */
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+.btn {
+  border-radius: 0px;
+}
+
+.btn-fixed {
+  min-width: 5em;
+}
+
+.btn-mailing {
+  margin: 0px 0px !important;
+}
+
+.btn-typeahead {
+  line-height: 20px;
+}
+
+.typeahead {
+  background-color: #fff;
+  width: 600px;
+  padding: 6px 12px;
+  font-size: 16px;
+  line-height: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.typeahead:focus {
+  border: 1px solid #777;
+}
+
+#qry-form .dropdown-menu {
+  width: 600px;
+  text-align: left;
+}
+
+#qry-form a {
+  padding-left: 0px;
+  margin-left: 0px;
+}
+
+.suggestion {
+  padding: 10px 12px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* ==========================================================================
+   Nav
+   ========================================================================== */
+
+.navbar-nav > li > a {
+  line-height: 30px;
+}
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.bg-weave {
+  background-image: url('../images/bg/whitey.png');
+}
+
+.hero {
+  height: 100%;
+  padding-top: 50px;
+}
+
+.hero h1 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  margin-top: 25px;
+  font-size: 70px;
+}
+
+.hero h3 {
+  font-size: 30px;
+}
+
+.hero h5 {
+  color: white;
+}
+
+.hero p {
+  text-align: left;
+  color: white
+}
+
+.hero-content {
+  padding: 15% 0px;
+  min-width: 700px;
+}
+
+.hero-arrow {
+  position: absolute;
+  z-index: 1;
+  display: block;
+  top: 50%;
+  outline: none;
+  cursor: pointer;
+  margin-top: -20px;
+}
+
+.hero-arrow-left {
+  left: 20px;
+}
+
+.hero-arrow-right {
+  right: 20px;
+}
+
+.hero-caption {
+  position: absolute;
+  background-color: rgba(60,60,60,0.8);
+  color: #FFF;
+  right: 20px;
+  display: block;
+  padding: 5px 7px;
+  z-index: 1;
+  bottom: 100px;
+  outline: none;
+  cursor: pointer;
+}
+
+.query-area form {
+  background: rgba(60,60,60,0.8);
+  -webkit-box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  /*border: 1px solid rgba(0,0,0,0.8);*/
+  padding: 4px;
+  line-height: 1.2;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   Intro
+   ========================================================================== */
+
+#app-content {
+
+}
+
+#featureswrap {
+  padding-top: 50px;
+}
+
+#howtowrap {
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+#howtowrap .ac a{
+  font-size: 20px;
+}
+
+/* Search Wrap */
+
+#search {
+  height: 60px;
+  background-color: #f2f2f2;
+}
+
+#search .pull-right {
+  line-height: 60px;
+  float: right;
+  padding-right: 10px;
+}
+
+/* Filter bar wrap */
+
+#filter-bar {
+  height: 50px;
+  white-space: nowrap;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+#filter-bar .right {
+  line-height: 50px;
+  float: right;
+  padding-left: 10px;
+}
+
+/* Showcase Wrap */
+
+#showcase {
+  display: block;
+  background-color: #34495e;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
+#showcase h1 {
+  color: white;
+}
+
+#footerwrap {
+  background-color: #2f2f2f;
+  color: white;
+  padding-top: 40px;
+  padding-bottom: 60px;
+  text-align: left;
+}
+
+#footerwrap h3 {
+  font-size: 28px;
+  color: white;
+}
+
+#footerwrap p {
+  color: white;
+  font-size: 18px;
+}
+
+/* Loading Wrap */
+
+#loading {
+  background: #f2f2f2;
+  padding: 4px inherit;
+  margin: 4px inherit;
+  text-align: center;
+}
+
+/* Copyright Wrap */
+
+#c {
+  background: #222222;
+  padding-top: 15px;
+  text-align: center;
+}
+
+#c p {
+  color: white
+}
+
+#c a {
+  color: #999999;
+}
