@@ -1,7 +1,18 @@
-/**
- * Handlebars Helpers
- */
-helpers = {
+/*--------------------------------------------------------*/
+/* Global Helpers                                         */
+/*--------------------------------------------------------*/
+
+window.helpers = {};
+
+// returns date in yyyy-mm-dd
+window.helpers.formatDate = function(date){
+  return date.getFullYear() + '-' + date.getMonth() + '-' + date.getDate();
+};
+
+/*--------------------------------------------------------*/
+/* Handlebar Helpers                                      */
+/*--------------------------------------------------------*/
+var helpers = {
   formatSize: function(size) {
     return size.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' kb';
   },
@@ -24,12 +35,7 @@ helpers = {
     }
   },
 
-  /**
-   * {{addCommas}}
-   *
-   * Add commas to numbers
-   * @param {[type]} number [description]
-   */
+  // Add commas to numbers
   addCommas: function (number) {
     return number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
   },

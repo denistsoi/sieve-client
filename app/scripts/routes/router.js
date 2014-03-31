@@ -38,8 +38,9 @@ Sieve.Router = Backbone.Router.extend({
     this.$el.append(new Sieve.HeaderView({ ticker: ticker }).render().el);
     this.$el.append(new Sieve.ChartView({
       ticker: ticker,
-      company: new Sieve.Company(),
-      collection: new Sieve.Documents()
+      company: new Sieve.Company({}),
+      collection: new Sieve.Documents({}),
+      yahoo: new Sieve.Yahoo({ticker: ticker})
     }).render().el);
     $('body').removeClass('bg-weave');
   }

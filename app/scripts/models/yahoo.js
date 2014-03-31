@@ -1,21 +1,31 @@
-var Stock = Backbone.Model.extend({
+Sieve.Yahoo = Backbone.Model.extend({
   initialize: function(opts){
-    var context = this;
+    var self = this;
+    self.ticker = opts.ticker;
 
-    context.ticker = opts.ticker;
+    self.startDate = moment('2013-01-01').format('YYYY-MM-DD');
+    self.endDate = moment().format('YYYY-MM-DD');
+
+    console.log('Yahoo: Fetching data for', self.ticker);
 
     // get historical data
-    context.query({ stock: opts.ticker, startDate: '2014-03-01', endDate: this.today() }, 'historicaldata', function(err, data) {
-      console.log('Data:', data);
-      context.ticks = data.quote;
-      context.displayTicks();
+    self.query({
+      stock: opts.ticker,
+      startDate: self.startDate,
+      endDate: self.endDate
+    }, 'historicaldata', function(err, data) {
+      console.log('Yahoo: Data returned...', data);
+      self.ticks = data.quote;
+      self.displayTicks();
     });
 
     // get current quotes
-    context.query({ stock: opts.ticker, startDate: '2014-03-01', endDate: this.today() }, 'quotes', function(err, data) {
-      console.log('Metrics:', data);
-      context.metrics = data.quote;
-      context.displayMetrics();
+    self.query({
+      stock: opts.ticker
+    }, 'quotes', function(err, data) {
+      console.log('Yahoo: Metrics returned...', data);
+      self.metrics = data.quote;
+      self.displayMetrics();
     });
   },
 
@@ -69,9 +79,4 @@ var Stock = Backbone.Model.extend({
     this.trigger('metricsReady', this);
   },
 
-  // returns today's date in yyyy-mm-dd
-  today: function(){
-    var today = new Date();
-    return today.getFullYear + '-' + today.getMonth() + '-' + today.getDate();
-  }
 });
