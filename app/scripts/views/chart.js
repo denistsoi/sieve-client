@@ -43,11 +43,6 @@ Sieve.ChartView = Backbone.View.extend({
       };
       console.log('ChartView: Rendering', scope);
       this.$el.html( this.template(scope) );
-      var dummyData =[
-        {name: Date.now(), value: 1},
-        {name: Date.now() - 20000, value: 2},
-        {name: Date.now() - 50000, value: 3}
-      ];
       this.prepareChart();
       this.updateChart(this.collection.models);
     } else {
@@ -102,7 +97,7 @@ Sieve.ChartView = Backbone.View.extend({
   defaults: {
     maxWidth: 960,
     maxHeight: 500,
-    margin: {top: 20, right: 30, bottom: 30, left: 40}
+    margin: {top: 20, right: 50, bottom: 30, left: 50}
   },
 
   color: function(str){
