@@ -50,6 +50,8 @@
         <h3>{{ company.full_name }} ({{ company.ticker }})</h3>
       </div>
     </div>
+    <svg class="chart">
+    </svg>
   </script>
 
   <!-- Company View -->
@@ -63,7 +65,7 @@
       <div id="filter-bar">
         <button class="prev btn btn-default btn-stub"><i class="fa fa-angle-left fa-lg"></i></button>
         <button class="next btn btn-default btn-stub"><i class="fa fa-angle-right fa-lg"></i></button>
-        <span class="valign right">{{ addCommas meta.offset }}-{{ add meta.offset meta.limit }}  of {{ addCommas meta.total_count }} documents. Last updated on {{ formatDate company.last_updated }}.</span>
+        <span class="valign right">{{ add meta.offset 1 }}-{{ add meta.offset meta.limit }}  of {{ addCommas meta.total_count }} documents. Last updated on {{ formatDate company.last_updated }}.</span>
         <span class="valign-helper"></span>
       </div>
 
@@ -116,7 +118,7 @@
   <script type="text/x-handlebars-template" id="queryView">
     <form class="query-form form-inline" role="form">
       <div class="form-group">
-        <input class="typeahead" type="text" placeholder="Enter ticker or company name.. (click or press / to focus)" />
+        <input class="typeahead" type="text" placeholder="Enter ticker..." />
       </div>
       <button class="btn btn-typeahead btn-fixed" type="submit"><i class="fa fa-search"></i></button>
     </form>
