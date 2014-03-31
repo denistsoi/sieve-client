@@ -45,9 +45,9 @@ Sieve.ChartView = Backbone.View.extend({
       this.$el.html( this.template(scope) );
       this.prepareChart();
       this.updateChart([
-        {name: 'J', value: 1},
-        {name: 'B', value: 2},
-        {name: 'C', value: 3}
+        {name: Date.now(), value: 1},
+        {name: Date.now() - 20000, value: 2},
+        {name: Date.now() - 50000, value: 3}
       ]);
     } else {
       // show spinner if retrieving data
@@ -107,18 +107,22 @@ Sieve.ChartView = Backbone.View.extend({
   prepareChart: function(){
     console.log('ChartView: Prepping charts...');
 
-    this.defaults.width = 960 - this.defaults.margin.left - this.defaults.margin.right;
-    this.defaults.height = 500 - this.defaults.margin.top - this.defaults.margin.bottom;
+    this.defaults.width = this.defaults.maxWidth - this.defaults.margin.left - this.defaults.margin.right;
+    this.defaults.height = this.defaults.maxHeight - this.defaults.margin.top - this.defaults.margin.bottom;
 
-    this.x = d3.scale.ordinal()
-      .rangeRoundBands([0, this.defaults.width], .1);
+    // this.x = d3.scale.linear()
+    //   .range([0, this.defaults.width]);
+
+    this.x = d3.time.scale()
+      .range([0, this.defaults.width]);
 
     this.y = d3.scale.linear()
       .range([this.defaults.height, 0]);
 
     this.xAxis = d3.svg.axis()
       .scale(this.x)
-      .orient("bottom");
+      .orient("bottom")
+      .tickFormat(d3.time.format("%d %b %Y"));
 
     this.yAxis = d3.svg.axis()
       .scale(this.y)
@@ -132,13 +136,15 @@ Sieve.ChartView = Backbone.View.extend({
 
     // date parsing
     this.parseDate = d3.time.format("%Y-%m-%d").parse;
-    console.log(this.chart);
   },
 
   updateChart: function(data){
     console.log('ChartView: Populating chart...', data);
     var self = this;
-    this.x.domain(data.map(function(d) { return d.name; }));
+    this.x.domain([
+      d3.min(data, function(d) { return d.name; }),
+      d3.max(data, function(d) { return d.name; })
+    ]);
     this.y.domain([0, d3.max(data, function(d) { return d.value; })]);
 
     this.chart.append("g")
@@ -157,7 +163,7 @@ Sieve.ChartView = Backbone.View.extend({
         .attr("x", function(d) { return self.x(d.name); })
         .attr("y", function(d) { return self.y(d.value); })
         .attr("height", function(d) { return self.defaults.height - self.y(d.value); })
-        .attr("width", this.x.rangeBand());
+        .attr("width", 10);
   }
 
 });
