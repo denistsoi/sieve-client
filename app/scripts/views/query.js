@@ -15,7 +15,7 @@
   submit: function(e) {
     e.preventDefault();
     var query = $('input.typeahead').val();
-    window.router.navigate('/company/' + query, {trigger: true});
+    window.router.navigate('list/company/' + query, {trigger: true});
     console.log('QueryView submit:', query);
   },
 

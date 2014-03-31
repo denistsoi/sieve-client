@@ -14,9 +14,9 @@ window.Sieve = Backbone.View.extend({
     Backbone.history.start({ pushState: false });
   },
 
-  events: {
-    'keypress :input': 'logKey'
-  },
+  // events: {
+  //   'keypress :input': 'logKey'
+  // },
 
   render: function(){
     this.$el.prepend( this.template() );

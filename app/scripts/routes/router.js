@@ -7,7 +7,8 @@ Sieve.Router = Backbone.Router.extend({
 
   routes: {
     '': 'index',
-    'company/:ticker': 'company'
+    'list/company/:ticker': 'list',
+    'chart/company/:ticker': 'chart'
   },
 
   index: function(){
@@ -19,11 +20,23 @@ Sieve.Router = Backbone.Router.extend({
     $('body').addClass('bg-weave');
   },
 
-  company: function(ticker){
+  list: function(ticker){
     console.log('Router: CompanyView', ticker);
     this.$el.empty();
-    this.$el.append(new Sieve.HeaderView().render().el);
+    this.$el.append(new Sieve.HeaderView({ ticker: ticker }).render().el);
     this.$el.append(new Sieve.CompanyView({
+      ticker: ticker,
+      company: new Sieve.Company(),
+      collection: new Sieve.Documents()
+    }).render().el);
+    $('body').removeClass('bg-weave');
+  },
+
+  chart: function(ticker){
+    console.log('Router: CompanyView', ticker);
+    this.$el.empty();
+    this.$el.append(new Sieve.HeaderView({ ticker: ticker }).render().el);
+    this.$el.append(new Sieve.ChartView({
       ticker: ticker,
       company: new Sieve.Company(),
       collection: new Sieve.Documents()
