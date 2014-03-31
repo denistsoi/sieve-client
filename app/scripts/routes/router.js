@@ -11,7 +11,6 @@ Sieve.Router = Backbone.Router.extend({
   },
 
   swapView: function(view){
-    console.log(this);
     this.$el.html(view.render().el);
   },
 
@@ -26,7 +25,8 @@ Sieve.Router = Backbone.Router.extend({
 
   company: function(ticker){
     console.log('Router: CompanyView', ticker);
-    this.swapView(new Sieve.CompanyView());
+    this.app.companyView.renderByTicker(ticker);
+    this.swapView(this.app.companyView);
     $('body').removeClass('bg-weave');
   }
 

@@ -1,24 +1,17 @@
 Sieve.CompanyView = Backbone.View.extend({
 
-  className: 'company-view',
+  className: 'document-view',
 
   template: Templates.companyView,
 
   initialize: function(opts){
     this.collection = opts.collection;
     this.company = opts.company;
-    this.collection.on('sync', this.render, this);
-    this.company.on('sync', this.render, this);
     this.queryView = new Sieve.QueryView();
   },
 
   render: function(){
-    var scope = {
-      company: this.company.attributes[0],
-      docs: this.collection.models
-    };
-    console.log('CompanyView: Render with scope', scope);
-    this.$el.html( this.template(scope) );
+    this.$el.html( this.template({company: this.company}) );
     this.$el.find('.query-view').append(this.queryView.el);
 
     return this;
@@ -34,6 +27,8 @@ Sieve.CompanyView = Backbone.View.extend({
     });
     this.company.fetch({ data: companyParams });
 
+    console.log('yea', this.company, this.collection);
+
     var documentParams = $.param({
       obj_only: 'true',
       format: 'json',
@@ -41,6 +36,7 @@ Sieve.CompanyView = Backbone.View.extend({
     });
     this.collection.fetch({ data: documentParams });
 
-    // console.log(this.collection, this.company);
+    console.log('yea', this.company, this.collection);
+    this.render();
   }
 });

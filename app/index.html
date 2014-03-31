@@ -32,6 +32,16 @@
     <div class="footer-view"></div>
   </script>
 
+  <!-- Top Bar View -->
+  <script type="text/x-handlebars-template" id="topBarView">
+    // search query
+  </script>
+
+  <!-- Chart View -->
+  <script type="text/x-handlebars-template" id="chartView">
+    // chart view
+  </script>
+
   <!-- Company View -->
   <script type="text/x-handlebars-template" id="companyView">
     <div id="search">
@@ -42,14 +52,13 @@
       <div class="valign-helper"></div>
     </div>
 
-    <div id="app-content" class="container" ng-switch on="data.status">
-      <div ng-switch-when="200">
-        <h3>{{ data.company.full_name }}</h3>
-        <a href="{{ data.company.website }}">{{ data.company.website }}</a>
+    <div id="app-content" class="container">
+      <div>
+        <h3>{{ company.full_name }} ({{ company.ticker }})</h3>
+        <a href="{{ company.website }}">{{ company.website }}</a>
 
         <div id="filter-bar">
-          <span ng-repeat="filter in data.filters"> <a href ng-click=filterBy(filter.params)>{{filter.label}}</a> </span>|
-          <span class="valign right" ng-show='data.documentLoader.totalReady()'>{{ data.documentLoader.total }} documents. Last updated on {{ data.company.last_updated }}.</span>
+          <span class="valign right">{{ documentLoader.total }} documents. Last updated on {{ company.last_updated }}.</span>
           <span class="valign-helper"></span>
         </div>
 
@@ -64,14 +73,16 @@
             </tr>
           </thead>
           <div infinite-scroll='data.documentLoader.nextPage()' infinite-scroll-disabled='data.documentLoader.busy'>
-            <tbody ng-repeat='doc in data.documentLoader.items'>
+            <tbody>
+              {{#each docs}}
               <tr>
-                <td class="ellipsis">{{ doc.date }}</td>
-                <td class="ellipsis">{{ doc.cat.name }}</td>
-                <td class="ellipsis"><a href="{{ doc.url }}" target="_blank">{{ doc.description }}</a></td>
-                <td class="text-right">{{ doc.size }}</td>
-                <td class="text-right">{{ doc.filetype }}</td>
+                <td class="ellipsis">{{ this.attributes.date }}</td>
+                <td class="ellipsis">{{ this.attributes.cat.name }}</td>
+                <td class="ellipsis"><a href="{{ this.attributes.url }}" target="_blank">{{ this.attributes.description }}</a></td>
+                <td class="text-right">{{ this.attributes.size }}</td>
+                <td class="text-right">{{ this.attributes.filetype }}</td>
               </tr>
+              {{/each}}
             </tbody>
           </div>
         </table>
@@ -83,7 +94,7 @@
       <div>
         <h3>Ticker {{data.ticker}} does not exist. Possible reasons:</h3>
         <p>
-          No such ticker. Sabre only supports HKSE filings currently.<br>
+          No such ticker. Sieve supports all HKSE filings.<br>
           We messed up! Please email contact@sieve.io with feedback.
         </p>
       </div>
@@ -139,20 +150,27 @@
   <!-- endbuild -->
 
   <script>
-    $(function(){
-      new Sieve();
-    });
+    window.server = 'http://jyek.cloudapp.net:3002/api/v1/';
 
     // load templates
     window.Templates = {};
     $('[type="text/x-handlebars-template"]').each(function(index, div){
       Templates[div.id] = Handlebars.compile(div.innerHTML);
     });
+
+    $(function(){
+      new Sieve();
+    });
   </script>
 
   <!-- build:js({.tmp,app}) scripts/main.js -->
+  <script src="scripts/helpers.js"></script>
   <script src="scripts/app.js"></script>
   <script src="scripts/routes/router.js"></script>
+  <script src="scripts/models/company.js"></script>
+  <script src="scripts/models/document.js"></script>
+  <script src="scripts/collections/companies.js"></script>
+  <script src="scripts/collections/documents.js"></script>
   <script src="scripts/views/footer.js"></script>
   <script src="scripts/views/query.js"></script>
   <script src="scripts/views/company.js"></script>

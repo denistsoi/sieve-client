@@ -12,7 +12,9 @@ window.Sieve = Backbone.View.extend({
     // views
     this.landingView = new Sieve.LandingView();
     this.queryView = new Sieve.QueryView();
-    this.companyView = new Sieve.CompanyView();
+    this.docs = new Sieve.Documents();
+    this.company = new Sieve.Company();
+    this.companyView = new Sieve.CompanyView({ company: this.company, collection: this.docs });
 
     // router
     this.router = new Sieve.Router( { el: this.$el.find('.content-view'), app: this } );
