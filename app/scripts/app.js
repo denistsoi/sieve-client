@@ -1,42 +1,31 @@
 window.Sieve = Backbone.View.extend({
 
-  className: 'app-view',
+  el: 'body',
 
-  // template: Templates.layout,
   template: Templates.appView,
 
   initialize: function(){
     console.log('Welcome to Sieve 2014 Beta');
-    $('body').prepend( this.render().el );
+    this.render();
 
-    // views
-    this.landingView = new Sieve.LandingView();
-    this.queryView = new Sieve.QueryView();
-    this.docs = new Sieve.Documents();
-    this.company = new Sieve.Company();
-    this.companyView = new Sieve.CompanyView({ company: this.company, collection: this.docs });
-
-    // router
+    // init router and make globally accessible
     this.router = new Sieve.Router( { el: this.$el.find('.content-view'), app: this } );
+    window.router = this.router;
     Backbone.history.start({ pushState: false });
-
-    // events
-    this.queryView.on('query', this.renderCompanyView, this);
   },
 
   events: {
-    // 'on ': 'renderCompanyView'
-    // 'keypress :input': 'logKey'
+    'keypress :input': 'logKey'
   },
 
   render: function(){
-    this.$el.html( this.template() );
+    this.$el.prepend( this.template() );
     return this;
   },
 
   renderCompanyView: function(query){
     console.log('AppView renderCompanyView:', query);
-    this.router.navigate('/company/' + query, {trigger: true});
+
   },
 
   logKey: function(e) {

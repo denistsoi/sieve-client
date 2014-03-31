@@ -1,6 +1,6 @@
-Sieve.QueryView = Backbone.View.extend({
+ Sieve.QueryView = Backbone.View.extend({
 
-  className: 'queryView',
+  className: 'query-view',
 
   template: Templates.queryView,
 
@@ -15,8 +15,8 @@ Sieve.QueryView = Backbone.View.extend({
   submit: function(e) {
     e.preventDefault();
     var query = $('input.typeahead').val();
-    this.trigger('query', query);
-    console.log('QueryView submit:', this, query);
+    window.router.navigate('/company/' + query, {trigger: true});
+    console.log('QueryView submit:', query);
   },
 
   render: function() {

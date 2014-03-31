@@ -277,10 +277,6 @@ hr {
    Intro
    ========================================================================== */
 
-#app-content {
-
-}
-
 #featureswrap {
   padding-top: 50px;
 }
@@ -357,10 +353,10 @@ hr {
 
 /* Loading Wrap */
 
-#loading {
+#spinner {
   background: #f2f2f2;
-  padding: 4px inherit;
-  margin: 4px inherit;
+  padding: 20px inherit;
+  margin: 20px inherit;
   text-align: center;
 }
 

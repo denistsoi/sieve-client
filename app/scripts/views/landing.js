@@ -4,8 +4,7 @@ Sieve.LandingView = Backbone.View.extend({
 
   template: Templates.landingView,
 
-  initialize: function(params){
-    this.render();
+  initialize: function(opts){
   },
 
   render: function() {

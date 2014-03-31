@@ -1,8 +1,8 @@
 Sieve.Router = Backbone.Router.extend({
 
-  initialize: function(options){
-    this.$el = options.el;
-    this.app = options.app;
+  initialize: function(opts){
+    this.$el = opts.el;
+    this.app = opts.app;
   },
 
   routes: {
@@ -10,23 +10,24 @@ Sieve.Router = Backbone.Router.extend({
     'company/:ticker': 'company'
   },
 
-  swapView: function(view){
-    this.$el.html(view.render().el);
-  },
-
   index: function(){
     console.log('Router: LandingView');
-    this.$el.html('');
-    this.$el.append(this.app.landingView.el);
+    this.$el.empty();
+    this.$el.append(new Sieve.LandingView().render().el);
     $container = $('<div class="container centered"></div>');
-    this.$el.append($container.append(this.app.queryView.el));
+    this.$el.append($container.append(new Sieve.QueryView().render().el));
     $('body').addClass('bg-weave');
   },
 
   company: function(ticker){
     console.log('Router: CompanyView', ticker);
-    this.app.companyView.renderByTicker(ticker);
-    this.swapView(this.app.companyView);
+    this.$el.empty();
+    this.$el.append(new Sieve.HeaderView().render().el);
+    this.$el.append(new Sieve.CompanyView({
+      ticker: ticker,
+      company: new Sieve.Company(),
+      collection: new Sieve.Documents()
+    }).render().el);
     $('body').removeClass('bg-weave');
   }
 

@@ -33,8 +33,14 @@
   </script>
 
   <!-- Top Bar View -->
-  <script type="text/x-handlebars-template" id="topBarView">
-    // search query
+  <script type="text/x-handlebars-template" id="headerView">
+    <div id="search">
+      <a href="#"><img class="valign brand" src="images/logo-small-v1.png"></a>
+      <div class="valign query-view"></div>
+      <div class="valign pull-right"><button class="btn btn-default btn-fixed inner"><i class="fa fa-cog fa-lg"></i></button></div>
+      <div class="valign pull-right"><button class="btn btn-default btn-fixed inner"><i class="fa fa-mail-forward fa-lg"></i></button></div>
+      <div class="valign-helper"></div>
+    </div>
   </script>
 
   <!-- Chart View -->
@@ -44,21 +50,13 @@
 
   <!-- Company View -->
   <script type="text/x-handlebars-template" id="companyView">
-    <div id="search">
-      <a href="#"><img class="valign brand" src="images/logo-small-v1.png"></a>
-      <div class="valign query-view"></div>
-      <div class="valign pull-right"><button class="btn btn-default btn-fixed inner"><i class="fa fa-cog fa-lg"></i></button></div>
-      <div class="valign pull-right"><button class="btn btn-default btn-fixed inner"><i class="fa fa-mail-forward fa-lg"></i></button></div>
-      <div class="valign-helper"></div>
-    </div>
-
-    <div id="app-content" class="container">
+    <div class="container">
       <div>
         <h3>{{ company.full_name }} ({{ company.ticker }})</h3>
         <a href="{{ company.website }}">{{ company.website }}</a>
 
         <div id="filter-bar">
-          <span class="valign right">{{ documentLoader.total }} documents. Last updated on {{ company.last_updated }}.</span>
+          <span class="valign right">{{ meta.total_count }} documents. Last updated on {{ formatDate company.last_updated }}.</span>
           <span class="valign-helper"></span>
         </div>
 
@@ -76,10 +74,10 @@
             <tbody>
               {{#each docs}}
               <tr>
-                <td class="ellipsis">{{ this.attributes.date }}</td>
+                <td class="ellipsis">{{ formatDate this.attributes.date }}</td>
                 <td class="ellipsis">{{ this.attributes.cat.name }}</td>
                 <td class="ellipsis"><a href="{{ this.attributes.url }}" target="_blank">{{ this.attributes.description }}</a></td>
-                <td class="text-right">{{ this.attributes.size }}</td>
+                <td class="text-right">{{ formatSize this.attributes.size }}</td>
                 <td class="text-right">{{ this.attributes.filetype }}</td>
               </tr>
               {{/each}}
@@ -87,17 +85,25 @@
           </div>
         </table>
         <div class="clearfix"></div>
-        <div id="loading" ng-show='data.documentLoader.busy'><i class="fa fa-refresh fa-lg fa-spin"></i></div>
-        <br>
-        <br>
       </div>
+    </div>
+  </script>
+
+  <script type="text/x-handlebars-template" id="notFoundView">
+    <div class="container">
       <div>
-        <h3>Ticker {{data.ticker}} does not exist. Possible reasons:</h3>
+        <h3>Ticker {{ticker}} does not exist. Possible reasons:</h3>
         <p>
-          No such ticker. Sieve supports all HKSE filings.<br>
-          We messed up! Please email contact@sieve.io with feedback.
+          1. No such ticker. We only supports HKSE filings at the moment.<br>
+          2. We messed up! Please email contact@sieve.io with feedback.
         </p>
       </div>
+    </div>
+  </script>
+
+  <script type="text/x-handlebars-template" id="spinnerView">
+    <div class="container">
+      <div id="spinner"><i class="fa fa-refresh fa-lg fa-spin"></i></div>
     </div>
   </script>
 
@@ -147,6 +153,7 @@
   <script src="bower_components/backbone/backbone.js"></script>
   <script src="bower_components/typeahead.js/dist/typeahead.jquery.js"></script>
   <script src="bower_components/handlebars/handlebars.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
   <!-- endbuild -->
 
   <script>
@@ -171,6 +178,7 @@
   <script src="scripts/models/document.js"></script>
   <script src="scripts/collections/companies.js"></script>
   <script src="scripts/collections/documents.js"></script>
+  <script src="scripts/views/header.js"></script>
   <script src="scripts/views/footer.js"></script>
   <script src="scripts/views/query.js"></script>
   <script src="scripts/views/company.js"></script>
