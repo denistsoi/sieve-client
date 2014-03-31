@@ -16,7 +16,7 @@ Sieve.ChartView = Backbone.View.extend({
     this.collection = opts.collection;
     this.company = opts.company;
     this.offset = 0;
-    this.limit = 50;
+    this.limit = 100;
 
     // fetch data
     this.fetchAll();
@@ -43,12 +43,13 @@ Sieve.ChartView = Backbone.View.extend({
       };
       console.log('ChartView: Rendering', scope);
       this.$el.html( this.template(scope) );
-      this.prepareChart();
-      this.updateChart([
+      var dummyData =[
         {name: Date.now(), value: 1},
         {name: Date.now() - 20000, value: 2},
         {name: Date.now() - 50000, value: 3}
-      ]);
+      ];
+      this.prepareChart();
+      this.updateChart(this.collection.models);
     } else {
       // show spinner if retrieving data
       this.$el.html( this.spinner() );
@@ -104,6 +105,34 @@ Sieve.ChartView = Backbone.View.extend({
     margin: {top: 20, right: 30, bottom: 30, left: 40}
   },
 
+  color: function(str){
+    str = str.toLowerCase();
+    re = {
+      report: /annual report|interim report/,
+      dividend: /dividend/,
+      majorTrans: /takeover|acquisition|substantial|major transaction|major/,
+      minorTrans: /discloseable transaction|discloseable/,
+      buyback: /buyback/,
+      listing: /listing|wpip|web proof information pack|prospectus|stabilizing|global offering/
+    };
+
+    if (str.match(re.report) !== null){
+      return 'green';
+    } else if ( str.match(re.dividend) !== null){
+      return 'yellow';
+    } else if ( str.match(re.majorTrans) !== null){
+      return 'red';
+    } else if ( str.match(re.minorTrans) !== null){
+      return 'orange';
+    } else if ( str.match(re.buyback) !== null){
+      return 'lightgreen';
+    } else if ( str.match(re.listing) !== null){
+    return 'blue';
+    } else {
+      return 'gray';
+    }
+  },
+
   prepareChart: function(){
     console.log('ChartView: Prepping charts...');
 
@@ -142,10 +171,10 @@ Sieve.ChartView = Backbone.View.extend({
     console.log('ChartView: Populating chart...', data);
     var self = this;
     this.x.domain([
-      d3.min(data, function(d) { return d.name; }),
-      d3.max(data, function(d) { return d.name; })
+      d3.min(data, function(d) { return Date.parse(d.attributes.date); }),
+      d3.max(data, function(d) { return Date.parse(d.attributes.date); })
     ]);
-    this.y.domain([0, d3.max(data, function(d) { return d.value; })]);
+    this.y.domain([0, d3.max(data, function(d) { return d.attributes.size; })]);
 
     this.chart.append("g")
         .attr("class", "x axis")
@@ -159,11 +188,11 @@ Sieve.ChartView = Backbone.View.extend({
     this.chart.selectAll(".bar")
         .data(data)
       .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d) { return self.x(d.name); })
-        .attr("y", function(d) { return self.y(d.value); })
-        .attr("height", function(d) { return self.defaults.height - self.y(d.value); })
-        .attr("width", 10);
+        .attr("class", function(d) { return self.color(d.attributes.description); })
+        .attr("x", function(d) { return self.x(Date.parse(d.attributes.date)); })
+        .attr("y", 1)
+        .attr("height", function(d) { return self.defaults.height - 1; })
+        .attr("width", 3);
   }
 
 });

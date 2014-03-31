@@ -1,7 +1,6 @@
 body {
   font-family: 'Open Sans', Helvetica, Arial, sans-serif;
   font-size: 14px;
-  color: #555;
   -webkit-font-smoothing: antialiased;
   -webkit-overflow-scrolling: touch;
 }
@@ -85,9 +84,26 @@ hr {
    Charts
    ========================================================================== */
 
-.bar {
-  fill: steelblue;
+.legend-wrap {
+  margin: 20px auto;
 }
+
+.legend {
+  padding: 8px;
+  color: white;
+}
+
+.dark {
+  color: black !important;
+}
+
+.red { fill: #C22121; background-color: #C22121; }
+.green { fill: #047878; background-color: #047878; }
+.lightgreen { fill: #78AA00; background-color: #78AA00; }
+.yellow { fill: #FFB733; background-color: #FFB733; }
+.orange { fill: #F57336; background-color: #F57336; }
+.blue { fill: #003056; background-color: #003056; }
+.gray { fill: rgb(238,238,238); background-color: rgb(238,238,238); }
 
 .axis text {
   font: 10px sans-serif;
