@@ -99,4 +99,5 @@ Sieve.CompanyView = Backbone.View.extend({
     });
     this.collection.fetch({ data: documentParams });
   }
+
 });
