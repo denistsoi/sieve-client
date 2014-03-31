@@ -26,7 +26,7 @@ p {
 .brand {
   padding-left: 20px;
   padding-right: 20px;
-  max-height: 30px;
+  max-height: 50px;
 }
 
 /* Links */
@@ -125,6 +125,10 @@ hr {
   margin: 0px 0px !important;
 }
 
+/* ==========================================================================
+   Query
+   ========================================================================== */
+
 .btn-typeahead {
   line-height: 20px;
 }
@@ -143,20 +147,39 @@ hr {
   border: 1px solid #777;
 }
 
-#qry-form .dropdown-menu {
-  width: 600px;
+.twitter-typeahead, .tt-hint {
+  width: 100%;
+}
+
+.query-view .tt-dropdown-menu {
+  width: 100%;
   text-align: left;
 }
 
-#qry-form a {
-  padding-left: 0px;
-  margin-left: 0px;
+.query-view .tt-suggestions {
+  background-color: #ffffff;
+  border: solid #ccc 1px;
 }
 
-.suggestion {
-  padding: 10px 12px;
+.query-view .tt-suggestion {
+  padding: 6px 12px;
   font-size: 14px;
   line-height: 20px;
+}
+
+.query-view .tt-suggestion:hover {
+  background-color: #ccc;
+}
+
+.query-view .empty-message {
+  padding: 10px 12px;
+  background-color: #ffffff;
+  border: solid #ccc 1px;
+}
+
+.query-view a {
+  padding-left: 0px;
+  margin-left: 0px;
 }
 
 /* ==========================================================================
@@ -173,6 +196,7 @@ hr {
 
 .bg-weave {
   background-image: url('../images/bg/whitey.png');
+  height: 100%;
 }
 
 .hero {

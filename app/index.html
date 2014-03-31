@@ -21,34 +21,104 @@
   <script src="bower_components/modernizr/modernizr.js"></script>
   <!-- endbuild -->
 </head>
-<body class="bg-weave">
+<body>
   <!--[if lt IE 10]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
   <![endif]-->
 
-  <div class="hero">
-    <div class="container centered">
-      <img src="images/logo.png"></img>
-      <h1>SIEVE</h1>
-      <h3>A search engine for listed company filings.</h3>
-      <br>
-      <div class="query-view">
-        <script type="text/ng-template" id="typeahead.html">
-          <a>
-            <span class="suggestion"><strong>{{match.model.fullName}}</strong> – {{match.label}}</span>
-          </a>
-        </script>
-        <form class="form-inline" id="qry-form" role="form" ng-submit="query()">
-          <div class="form-group">
-          <input class="typeahead" type="text" placeholder="Enter ticker or company name.. (click or press / to focus)" />
+  <!-- App View -->
+  <script type="text/x-handlebars-template" id="appView">
+    <div class="content-view"></div>
+    <div class="footer-view"></div>
+  </script>
+
+  <!-- Company View -->
+  <script type="text/x-handlebars-template" id="companyView">
+    <div id="search">
+      <a href="#"><img class="valign brand" src="images/logo-small-v1.png"></a>
+      <div class="valign query-view"></div>
+      <div class="valign pull-right"><button class="btn btn-default btn-fixed inner"><i class="fa fa-cog fa-lg"></i></button></div>
+      <div class="valign pull-right"><button class="btn btn-default btn-fixed inner"><i class="fa fa-mail-forward fa-lg"></i></button></div>
+      <div class="valign-helper"></div>
+    </div>
+
+    <div id="app-content" class="container" ng-switch on="data.status">
+      <div ng-switch-when="200">
+        <h3>{{ data.company.full_name }}</h3>
+        <a href="{{ data.company.website }}">{{ data.company.website }}</a>
+
+        <div id="filter-bar">
+          <span ng-repeat="filter in data.filters"> <a href ng-click=filterBy(filter.params)>{{filter.label}}</a> </span>|
+          <span class="valign right" ng-show='data.documentLoader.totalReady()'>{{ data.documentLoader.total }} documents. Last updated on {{ data.company.last_updated }}.</span>
+          <span class="valign-helper"></span>
+        </div>
+
+        <table class="table filings-table">
+          <thead>
+            <tr>
+              <th class="col-md-1">Date <i ng-click=toggleSort('date') class="fa fa-sort fa-pointer"></i></th>
+              <th class="col-md-3">Category <i ng-click=toggleSort('cat__name') class="fa fa-sort fa-pointer"></i></th>
+              <th class="col-md-5">Document <i ng-click=toggleSort('description') class="fa fa-sort fa-pointer"></i></th>
+              <th class="col-md-1 text-right">Size <i ng-click=toggleSort('size') class="fa fa-sort fa-pointer"></i></th>
+              <th class="col-md-1 text-right">Type <i ng-click=toggleSort('filetype') class="fa fa-sort fa-pointer"></i></th>
+            </tr>
+          </thead>
+          <div infinite-scroll='data.documentLoader.nextPage()' infinite-scroll-disabled='data.documentLoader.busy'>
+            <tbody ng-repeat='doc in data.documentLoader.items'>
+              <tr>
+                <td class="ellipsis">{{ doc.date }}</td>
+                <td class="ellipsis">{{ doc.cat.name }}</td>
+                <td class="ellipsis"><a href="{{ doc.url }}" target="_blank">{{ doc.description }}</a></td>
+                <td class="text-right">{{ doc.size }}</td>
+                <td class="text-right">{{ doc.filetype }}</td>
+              </tr>
+            </tbody>
           </div>
-          <button class="btn btn-fixed btn-typeahead" type="submit"><i class="fa fa-search"></i></button>
-        </form>
+        </table>
+        <div class="clearfix"></div>
+        <div id="loading" ng-show='data.documentLoader.busy'><i class="fa fa-refresh fa-lg fa-spin"></i></div>
+        <br>
+        <br>
+      </div>
+      <div>
+        <h3>Ticker {{data.ticker}} does not exist. Possible reasons:</h3>
+        <p>
+          No such ticker. Sabre only supports HKSE filings currently.<br>
+          We messed up! Please email contact@sieve.io with feedback.
+        </p>
       </div>
     </div>
-  </div>
+  </script>
 
-  <div class="footer-view"></div>
+  <!-- Query View -->
+  <script type="text/x-handlebars-template" id="queryView">
+    <form class="query-form form-inline" role="form">
+      <div class="form-group">
+        <input class="typeahead" type="text" placeholder="Enter ticker or company name.. (click or press / to focus)" />
+      </div>
+      <button class="btn btn-typeahead btn-fixed" type="submit"><i class="fa fa-search"></i></button>
+    </form>
+  </script>
+
+  <script type="text/x-handlebars-template" id="queryViewEmpty">
+    <div class="empty-message">Nothing found</div>
+  </script>
+
+  <script type="text/x-handlebars-template" id="queryViewSuggestion">
+    <a href="/{{ticker}}"><span class="suggestion"><strong>{{ticker}}</strong> – {{short_name}}</span></a>
+  </script>
+
+  <!-- Landing View -->
+  <script type="text/x-handlebars-template" id="landingView">
+    <div class="hero">
+      <div class="container centered">
+        <img src="images/logo-v1.png"></img>
+        <h1>SIEVE</h1>
+        <h3>A search engine for listed company filings.</h3>
+        <br>
+      </div>
+    </div>
+  </script>
 
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
   <script>
@@ -64,13 +134,30 @@
   <script src="bower_components/jquery/jquery.js"></script>
   <script src="bower_components/underscore/underscore.js"></script>
   <script src="bower_components/backbone/backbone.js"></script>
+  <script src="bower_components/typeahead.js/dist/typeahead.jquery.js"></script>
+  <script src="bower_components/handlebars/handlebars.js"></script>
   <!-- endbuild -->
 
+  <script>
+    $(function(){
+      new Sieve();
+    });
+
+    // load templates
+    window.Templates = {};
+    $('[type="text/x-handlebars-template"]').each(function(index, div){
+      Templates[div.id] = Handlebars.compile(div.innerHTML);
+    });
+  </script>
+
   <!-- build:js({.tmp,app}) scripts/main.js -->
-  <script src="scripts/main.js"></script>
-  <script src="scripts/templates.js"></script>
+  <script src="scripts/app.js"></script>
+  <script src="scripts/routes/router.js"></script>
   <script src="scripts/views/footer.js"></script>
   <script src="scripts/views/query.js"></script>
+  <script src="scripts/views/company.js"></script>
+  <script src="scripts/views/landing.js"></script>
   <!-- endbuild -->
+
 </body>
 </html>
