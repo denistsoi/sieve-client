@@ -33,6 +33,46 @@ helpers = {
   addCommas: function (number) {
     return number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");
   },
+
+  add: function (value, addition) {
+    return value + addition;
+  },
+
+  subtract: function (value, substraction) {
+    return value - substraction;
+  },
+
+  divide: function (value, divisor) {
+    return value / divisor;
+  },
+
+  multiply: function (value, multiplier) {
+    return value * multiplier;
+  },
+
+  floor: function (value) {
+    return Math.floor(value);
+  },
+
+  ceil: function (value) {
+    return Math.ceil(value);
+  },
+
+  round: function (value) {
+    return Math.round(value);
+  },
+
+  sum: function () {
+    var args = _.flatten(arguments);
+    var sum = 0;
+    var i = args.length - 1;
+    while (i--) {
+      if ("number" === typeof args[i]) {
+        sum += args[i];
+      }
+    }
+    return Number(sum);
+  }
 };
 
 for (var helper in helpers) {

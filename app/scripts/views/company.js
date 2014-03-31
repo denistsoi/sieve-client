@@ -10,9 +10,11 @@ Sieve.CompanyView = Backbone.View.extend({
     this.ticker = opts.ticker;
     this.collection = opts.collection;
     this.company = opts.company;
+    this.offset = 0;
+    this.limit = 50;
 
     // fetch data
-    this.fetchData();
+    this.fetchAll();
     this.done = {
       profile: false,
       docs: false
@@ -21,6 +23,27 @@ Sieve.CompanyView = Backbone.View.extend({
     // events
     this.collection.on('sync', this.docsReturn, this);
     this.company.on('sync', this.profileReturn, this);
+  },
+
+  events: {
+    'click .prev': 'getPrevious',
+    'click .next': 'getNext'
+  },
+
+  getPrevious: function(){
+    console.log('CompanyView getPrevious');
+    if (this.offset - this.limit > 0) this.offset -= this.limit;
+    this.done.docs = false;
+    this.render();
+    this.fetchDocs();
+  },
+
+  getNext: function(){
+    console.log('CompanyView getNext');
+    if (this.offset + this.limit < this.collection.meta.total_count) this.offset += this.limit;
+    this.done.docs = false;
+    this.render();
+    this.fetchDocs();
   },
 
   render: function(){
@@ -34,7 +57,7 @@ Sieve.CompanyView = Backbone.View.extend({
         docs: this.collection.models,
         meta: this.collection.meta
       };
-      console.log('CompanyView: Render with scope', scope);
+      // console.log('CompanyView: Render with scope', scope);
       this.$el.html( this.template(scope) );
     } else {
       // show spinner if retrieving data
@@ -54,18 +77,25 @@ Sieve.CompanyView = Backbone.View.extend({
     this.render();
   },
 
-  fetchData: function(){
-    console.log('CompanyView getTicker:', this.ticker);
+  fetchAll: function(){
+    this.fetchCompany();
+    this.fetchDocs();
+  },
 
+  fetchCompany: function(){
     var companyParams = $.param({
       format: 'json',
       ticker: this.ticker
     });
     this.company.fetch({ data: companyParams });
+  },
 
+  fetchDocs: function(){
     var documentParams = $.param({
       format: 'json',
-      company__ticker: this.ticker
+      company__ticker: this.ticker,
+      offset: this.offset,
+      limit: this.limit
     });
     this.collection.fetch({ data: documentParams });
   }

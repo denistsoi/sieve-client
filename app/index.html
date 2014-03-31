@@ -58,37 +58,39 @@
       <div>
         <h3>{{ company.full_name }} ({{ company.ticker }})</h3>
         <a href="{{ company.website }}">{{ company.website }}</a>
-
-        <div id="filter-bar">
-          <span class="valign right">{{ meta.total_count }} documents. Last updated on {{ formatDate company.last_updated }}.</span>
-          <span class="valign-helper"></span>
-        </div>
-
-        <table class="table filings-table">
-          <thead>
-            <tr>
-              <th class="col-md-1">Date <i ng-click=toggleSort('date') class="fa fa-sort fa-pointer"></i></th>
-              <th class="col-md-3">Category <i ng-click=toggleSort('cat__name') class="fa fa-sort fa-pointer"></i></th>
-              <th class="col-md-5">Document <i ng-click=toggleSort('description') class="fa fa-sort fa-pointer"></i></th>
-              <th class="col-md-1 text-right">Size <i ng-click=toggleSort('size') class="fa fa-sort fa-pointer"></i></th>
-              <th class="col-md-1 text-right">Type <i ng-click=toggleSort('filetype') class="fa fa-sort fa-pointer"></i></th>
-            </tr>
-          </thead>
-          <div infinite-scroll='data.documentLoader.nextPage()' infinite-scroll-disabled='data.documentLoader.busy'>
-            <tbody>
-              {{#each docs}}
-              <tr>
-                <td class="ellipsis">{{ formatDate this.attributes.date }}</td>
-                <td class="ellipsis">{{ this.attributes.cat.name }}</td>
-                <td class="ellipsis"><a href="{{ this.attributes.url }}" target="_blank">{{ this.attributes.description }}</a></td>
-                <td class="text-right">{{ formatSize this.attributes.size }}</td>
-                <td class="text-right">{{ this.attributes.filetype }}</td>
-              </tr>
-              {{/each}}
-            </tbody>
-          </div>
-        </table>
       </div>
+
+      <div id="filter-bar">
+        <button class="prev btn btn-default btn-stub"><i class="fa fa-angle-left fa-lg"></i></button>
+        <button class="next btn btn-default btn-stub"><i class="fa fa-angle-right fa-lg"></i></button>
+        <span class="valign right">{{ addCommas meta.offset }}-{{ add meta.offset meta.limit }}  of {{ addCommas meta.total_count }} documents. Last updated on {{ formatDate company.last_updated }}.</span>
+        <span class="valign-helper"></span>
+      </div>
+
+      <table class="table filings-table">
+        <thead>
+          <tr>
+            <th class="col-md-1">Date <i ng-click=toggleSort('date') class="fa fa-sort fa-pointer"></i></th>
+            <th class="col-md-3">Category <i ng-click=toggleSort('cat__name') class="fa fa-sort fa-pointer"></i></th>
+            <th class="col-md-5">Document <i ng-click=toggleSort('description') class="fa fa-sort fa-pointer"></i></th>
+            <th class="col-md-1 text-right">Size <i ng-click=toggleSort('size') class="fa fa-sort fa-pointer"></i></th>
+            <th class="col-md-1 text-right">Type <i ng-click=toggleSort('filetype') class="fa fa-sort fa-pointer"></i></th>
+          </tr>
+        </thead>
+        <div infinite-scroll='data.documentLoader.nextPage()' infinite-scroll-disabled='data.documentLoader.busy'>
+          <tbody>
+            {{#each docs}}
+            <tr>
+              <td class="ellipsis">{{ formatDate this.attributes.date }}</td>
+              <td class="ellipsis">{{ this.attributes.cat.name }}</td>
+              <td class="ellipsis"><a href="{{ this.attributes.url }}" target="_blank">{{ this.attributes.description }}</a></td>
+              <td class="text-right">{{ formatSize this.attributes.size }}</td>
+              <td class="text-right">{{ this.attributes.filetype }}</td>
+            </tr>
+            {{/each}}
+          </tbody>
+        </div>
+      </table>
     </div>
   </script>
 

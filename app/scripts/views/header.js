@@ -22,12 +22,12 @@ Sieve.HeaderView = Backbone.View.extend({
 
   chart: function(){
     console.log('HeaderView: Route chart mode');
-    window.router.navigate('chart/company/' + this.ticker);
+    window.router.navigate('chart/company/' + this.ticker, {trigger: true});
   },
 
   list: function(){
     console.log('HeaderView: Route list mode');
-    window.router.navigate('list/company' + this.ticker);
+    window.router.navigate('list/company/' + this.ticker, {trigger: true});
   }
 
 });

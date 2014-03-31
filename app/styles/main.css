@@ -121,6 +121,10 @@ hr {
   min-width: 5em;
 }
 
+.btn-stub {
+  min-width: 3em;
+}
+
 .btn-mailing {
   margin: 0px 0px !important;
 }
