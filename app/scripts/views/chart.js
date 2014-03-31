@@ -10,9 +10,11 @@ Sieve.ChartView = Backbone.View.extend({
     this.ticker = opts.ticker;
     this.collection = opts.collection;
     this.company = opts.company;
+    this.offset = 0;
+    this.limit = 50;
 
     // fetch data
-    this.fetchData();
+    this.fetchAll();
     this.done = {
       profile: false,
       docs: false
@@ -54,18 +56,25 @@ Sieve.ChartView = Backbone.View.extend({
     this.render();
   },
 
-  fetchData: function(){
-    console.log('CompanyView getTicker:', this.ticker);
+  fetchAll: function(){
+    this.fetchCompany();
+    this.fetchDocs();
+  },
 
+  fetchCompany: function(){
     var companyParams = $.param({
       format: 'json',
       ticker: this.ticker
     });
     this.company.fetch({ data: companyParams });
+  },
 
+  fetchDocs: function(){
     var documentParams = $.param({
       format: 'json',
-      company__ticker: this.ticker
+      company__ticker: this.ticker,
+      offset: this.offset,
+      limit: this.limit
     });
     this.collection.fetch({ data: documentParams });
   }
