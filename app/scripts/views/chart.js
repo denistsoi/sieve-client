@@ -5,9 +5,10 @@ Sieve.ChartView = Backbone.View.extend({
   template: Templates.chartView,
   spinner: Templates.spinnerView,
   notFound: Templates.notFoundView,
+  metrics: Templates.metricsView,
 
   /*--------------------------------------------------------*/
-  /* View                                                   */
+  /* View
   /*--------------------------------------------------------*/
 
   initialize: function(opts){
@@ -22,10 +23,10 @@ Sieve.ChartView = Backbone.View.extend({
     // fetch data
     this.fetchAll();
     this.done = {
-      profile: false,
-      docs: false,
-      ticks: false,
-      metrics: false
+      profile: 0,
+      docs: 0,
+      ticks: 0,
+      metrics: 0
     };
 
     // events
@@ -35,6 +36,11 @@ Sieve.ChartView = Backbone.View.extend({
     this.yahoo.on('ticksFailed', this.ticksReturn, this);
     this.yahoo.on('metrics', this.metricsReturn, this);
     this.yahoo.on('metricsFailed', this.metricsReturn, this);
+  },
+
+  renderMetricsView: function(){
+    console.log('ChartView: Render metrics view');
+    $('.metrics-wrap').append( this.metrics(this.yahoo.metrics) );
   },
 
   render: function(){
@@ -52,7 +58,8 @@ Sieve.ChartView = Backbone.View.extend({
       this.$el.html( this.template(scope) );
       this.prepareChart();
       this.updateChartAnnotations(this.collection.models);
-      this.updateStockPrice(this.yahoo.ticks);
+      if (this.done.ticks === 200) this.updateStockPrice(this.yahoo.ticks);
+      if (this.done.metrics === 200) this.renderMetricsView();
     } else {
       // show spinner if retrieving data
       this.$el.html( this.spinner() );
@@ -61,29 +68,49 @@ Sieve.ChartView = Backbone.View.extend({
     return this;
   },
 
+  /*--------------------------------------------------------*/
+  /* Receive data
+  /*--------------------------------------------------------*/
+
   profileReturn: function(){
     console.log('ChartView: Profile data received...');
-    this.done.profile = true;
+    this.done.profile = 200;
     this.render();
   },
 
   docsReturn: function(){
     console.log('ChartView: Document data received...');
-    this.done.docs = true;
+    this.done.docs = 200;
     this.render();
   },
 
   ticksReturn: function(){
     console.log('ChartView: Received Yahoo ticks', this.yahoo.ticks);
-    this.done.ticks = true;
+    this.done.ticks = 200;
     this.render();
   },
 
   metricsReturn: function(){
     console.log('ChartView: Received Yahoo metrics', this.yahoo.metrics);
-    this.done.metrics = true;
+    this.done.metrics = 200;
     this.render();
   },
+
+  ticksReturnFailed: function(){
+    console.log('ChartView: Received Yahoo ticks', this.yahoo.ticks);
+    this.done.ticks = 404;
+    this.render();
+  },
+
+  metricsReturnFailed: function(){
+    console.log('ChartView: Received Yahoo metrics', this.yahoo.metrics);
+    this.done.metrics = 404;
+    this.render();
+  },
+
+  /*--------------------------------------------------------*/
+  /* Fetch data
+  /*--------------------------------------------------------*/
 
   fetchAll: function(){
     console.log('ChartView: Fetching data...');
