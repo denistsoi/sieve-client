@@ -437,7 +437,8 @@ text.annotation {
 
 #spinner {
   background: #f2f2f2;
-  padding: 40vh inherit;
+  padding-top: 40vh;
+  padding-bottom: 60vh;
   text-align: center;
 }
 
