@@ -217,7 +217,6 @@ Sieve.ChartView = Backbone.View.extend({
 
     var displayAnno = function(data){
       data = data.attributes;
-      console.log(data);
       var raw = '{{ formatDate date }}: <a href="{{ url }}" target="_blank">{{ description }}</a> ({{ formatSize size}})';
       var template = Handlebars.compile(raw);
       // var html = date + ': ' + '<a href="' + data.attributes.url +'" target="_blank">' + data.attributes.description + '</a>';
