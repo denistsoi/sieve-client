@@ -142,9 +142,10 @@
   </script>
 
   <script type="text/x-handlebars-template" id="spinnerView">
-    <div class="container">
-      <div id="spinner"><i class="fa fa-refresh fa-lg fa-spin"></i></div>
-    </div>
+      <div id="spinner">
+        <div class="spinner-text centered">INITIATING</div>
+        <i class="fa fa-filter fa-3x fa-spin"></i>
+      </div>
   </script>
 
   <!-- Query View -->
@@ -201,7 +202,7 @@
   <script src="bower_components/handlebars/handlebars.js"></script>
   <script src="bower_components/moment/moment.js"></script>
   <!-- endbuild -->
-``
+
   <script>
     window.server = 'http://jyek.cloudapp.net:3002/api/v1/';
 

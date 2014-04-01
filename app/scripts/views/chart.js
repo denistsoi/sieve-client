@@ -18,10 +18,11 @@ Sieve.ChartView = Backbone.View.extend({
     this.company = opts.company;
     this.yahoo = opts.yahoo;
     this.offset = 0;
-    this.limit = 100;
+    this.limit = 250;
 
     // fetch data
     this.fetchAll();
+    this.loading = false;
     this.done = {
       profile: 0,
       docs: 0,
@@ -43,10 +44,10 @@ Sieve.ChartView = Backbone.View.extend({
     $('.metrics-wrap').append( this.metrics(this.yahoo.metrics) );
   },
 
-  render: function(){
+  render: function(msg){
     if (this.done.profile && this.company.meta.total_count === 0){
       // if ticker does not exist, show not found
-      this.$el.html( this.notFound({ ticker: this.ticker }) );
+      this.$el.html( this.notFound({ ticker: this.ticker }));
     } else if (this.done.profile && this.done.docs && this.done.ticks && this.done.metrics){
       // render template when data received
       var scope = {
@@ -62,7 +63,8 @@ Sieve.ChartView = Backbone.View.extend({
       if (this.done.metrics === 200) this.renderMetricsView();
     } else {
       // show spinner if retrieving data
-      this.$el.html( this.spinner() );
+      if (!this.loading) this.$el.html( this.spinner() );
+      this.loading = true;
     }
 
     return this;
@@ -75,7 +77,6 @@ Sieve.ChartView = Backbone.View.extend({
   profileReturn: function(){
     console.log('ChartView: Profile data received...');
     this.done.profile = 200;
-    this.render();
   },
 
   docsReturn: function(){
@@ -154,7 +155,7 @@ Sieve.ChartView = Backbone.View.extend({
     this.filters = {
       positiveProfit: {re: /positive profit alert|positive profit warning/, color: 'pink', label:'Positive Profit'},
       warning: {re: /profit warning|profit alert/, color: 'red', label: 'Profit Warning'},
-      report: {re: /annual report|interim report|announcement of results|annual results|half yearly results/, color: 'darkgray', label: 'Financial Reports'},
+      report: {re: /annual report|audited results|interim report|final results|announcement of results|annual results|half yearly results/, color: 'darkgray', label: 'Financial Reports'},
       dividend: {re: /dividend/, color: 'yellow', label: 'Dividends'},
       majorTrans: {re: /takeover|acquisition|substantial|major transaction|major/, color: 'green', label: 'Major Acquisitions'},
       minorTrans: {re: /discloseable transaction|discloseable/, color: 'lightgreen', label: 'Minor Acquisitions'},
@@ -217,7 +218,7 @@ Sieve.ChartView = Backbone.View.extend({
     var displayAnno = function(data){
       data = data.attributes;
       console.log(data);
-      var raw = '{{ formatDate date }}: <a href="{{ url }}" target="_blank">{{ description }}</a>';
+      var raw = '{{ formatDate date }}: <a href="{{ url }}" target="_blank">{{ description }}</a> ({{ formatSize size}})';
       var template = Handlebars.compile(raw);
       // var html = date + ': ' + '<a href="' + data.attributes.url +'" target="_blank">' + data.attributes.description + '</a>';
       d3.select("div.annotation")

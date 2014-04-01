@@ -14,7 +14,7 @@ window.helpers.formatDate = function(date){
 /*--------------------------------------------------------*/
 var helpers = {
   formatSize: function(size) {
-    return size.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' kb';
+    return size.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' KB';
   },
 
   formatMultiple: function(mult){

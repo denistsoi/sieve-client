@@ -14,6 +14,7 @@ Sieve.CompanyView = Backbone.View.extend({
     this.limit = 50;
 
     // fetch data
+    this.loading = false;
     this.fetchAll();
     this.done = {
       profile: false,
@@ -61,7 +62,8 @@ Sieve.CompanyView = Backbone.View.extend({
       this.$el.html( this.template(scope) );
     } else {
       // show spinner if retrieving data
-      this.$el.html( this.spinner() );
+      if (!this.loading) this.$el.html( this.spinner() );
+      this.loading = true;
     }
 
     return this;
