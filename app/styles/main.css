@@ -97,6 +97,7 @@ hr {
   color: black !important;
 }
 
+.darkgray { fill: rgb(150,150,150); background-color: rgb(150,150,150); }
 .red { fill: #C22121; background-color: #C22121; }
 .green { fill: #047878; background-color: #047878; }
 .lightgreen { fill: #78AA00; background-color: #78AA00; }
@@ -116,7 +117,11 @@ hr {
   shape-rendering: crispEdges;
 }
 
-
+.line {
+  fill: none;
+  stroke: black;
+  stroke-width: 3px;
+}
 
 /* ==========================================================================
    Font Awesome

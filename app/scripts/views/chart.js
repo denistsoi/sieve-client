@@ -32,14 +32,16 @@ Sieve.ChartView = Backbone.View.extend({
     this.collection.on('sync', this.docsReturn, this);
     this.company.on('sync', this.profileReturn, this);
     this.yahoo.on('ticks', this.ticksReturn, this);
+    this.yahoo.on('ticksFailed', this.ticksReturn, this);
     this.yahoo.on('metrics', this.metricsReturn, this);
+    this.yahoo.on('metricsFailed', this.metricsReturn, this);
   },
 
   render: function(){
     if (this.done.profile && this.company.meta.total_count === 0){
       // if ticker does not exist, show not found
       this.$el.html( this.notFound({ ticker: this.ticker }) );
-    } else if (this.done.profile && this.done.docs && this.done.ticks){
+    } else if (this.done.profile && this.done.docs && this.done.ticks && this.done.metrics){
       // render template when data received
       var scope = {
         company: this.company.attributes[0],
@@ -79,6 +81,8 @@ Sieve.ChartView = Backbone.View.extend({
 
   metricsReturn: function(){
     console.log('ChartView: Received Yahoo metrics', this.yahoo.metrics);
+    this.done.metrics = true;
+    this.render();
   },
 
   fetchAll: function(){
@@ -119,7 +123,8 @@ Sieve.ChartView = Backbone.View.extend({
   color: function(str){
     str = str.toLowerCase();
     re = {
-      report: /annual report|interim report/,
+      warning: /profit warning/,
+      report: /annual report|interim report|announcement of results/,
       dividend: /dividend/,
       majorTrans: /takeover|acquisition|substantial|major transaction|major/,
       minorTrans: /discloseable transaction|discloseable/,
@@ -127,18 +132,20 @@ Sieve.ChartView = Backbone.View.extend({
       listing: /listing|wpip|web proof information pack|prospectus|stabilizing|global offering/
     };
 
-    if (str.match(re.report) !== null){
-      return 'green';
+    if (str.match(re.warning) !== null){
+      return 'red';
+    } else if (str.match(re.report) !== null){
+      return 'darkgray';
     } else if ( str.match(re.dividend) !== null){
       return 'yellow';
     } else if ( str.match(re.majorTrans) !== null){
-      return 'red';
+      return 'green';
     } else if ( str.match(re.minorTrans) !== null){
-      return 'orange';
-    } else if ( str.match(re.buyback) !== null){
       return 'lightgreen';
+    } else if ( str.match(re.buyback) !== null){
+      return 'orange';
     } else if ( str.match(re.listing) !== null){
-    return 'blue';
+      return 'blue';
     } else {
       return 'gray';
     }
@@ -177,9 +184,6 @@ Sieve.ChartView = Backbone.View.extend({
       .x(function(d) { return self.x(d.date); })
       .y(function(d) { return self.y(d.close); });
 
-    // chart - init line
-    this.chart.append("path")
-      .attr("class", "line");
   },
 
   updateChartAnnotations: function(data){
@@ -200,9 +204,18 @@ Sieve.ChartView = Backbone.View.extend({
 
     this.chart.append("g")
         .attr("class", "y axis")
-        .call(this.yAxis);
+        .call(this.yAxis)
+        .append("text")
+          .attr("transform", "rotate(-90)")
+          .attr("y", 6)
+          .attr("dy", ".71em")
+          .style("text-anchor", "end")
+          .text("Price (HK$)");
 
-    this.chart.selectAll(".bar")
+    this.chart.append("g")
+        .attr("class", "bars");
+
+    this.chart.select("g.bars").selectAll(".bar")
         .data(data)
       .enter().append("rect")
         .attr("class", "bar")
@@ -231,6 +244,10 @@ Sieve.ChartView = Backbone.View.extend({
 
     this.chart.selectAll("g.y.axis")
       .call(this.yAxis);
+
+    // chart - init line
+    this.chart.append("path")
+      .attr("class", "line");
 
     // update line
     this.chart.selectAll("path.line")

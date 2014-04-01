@@ -52,17 +52,30 @@
     </div>
     <div class="legend-wrap container">
       <span>Legend:</span>
-      <span class="legend green">Annual / Interim Reports</span>
+      <span class="legend red">Profit Warnings</span>
+      <span class="legend darkgray">Annual / Interim Reports</span>
       <span class="legend yellow">Dividends</span>
-      <span class="legend red">Major Acquisitions</span>
-      <span class="legend orange">Minor Acquisitions</span>
-      <span class="legend lightgreen">Share Buybacks</span>
+      <span class="legend green">Major Acquisitions</span>
+      <span class="legend lightgreen">Minor Acquisitions</span>
+      <span class="legend orange">Share Buybacks</span>
       <span class="legend blue">Capital Raising / IPO</span>
       <span class="legend dark gray">Other</span>
     </div>
     <div class="container">
       <svg class="chart"></svg>
     </div>
+  </script>
+
+  <!-- Metrics View -->
+  <script type="text/x-handlebars-template" id="metricsView">
+    <h3>{{ LastTradePriceOnly }} | {{ Change }} ({{ ChangeinPercent }})</h3>
+    <div>Volume: {{ Volume }}</div>
+    <div>Market Cap: {{ MarketCapitalization }}</div>
+    <div>Price/LTM Earnings: {{ PERatio }}</div>
+    <div>Price/Book: {{ PriceBook }}</div>
+    <div>PEG: {{ PEGRatio }}</div>
+    <div>FY+0 EPS: {{ EPSEstimateCurrentYear }}</div>
+    <div>FY+1 EPS: {{ EPSEstimateNextYear }}</div>
   </script>
 
   <!-- Company View -->
@@ -113,7 +126,7 @@
         <h3>Ticker {{ticker}} does not exist. Possible reasons:</h3>
         <p>
           1. No such ticker. We only supports HKSE filings at the moment.<br>
-          2. We messed up! Please email contact@sieve.io with feedback.
+          2. We messed up! Please email justinyek@gmail.com with feedback.
         </p>
       </div>
     </div>
@@ -200,7 +213,7 @@
   <script src="scripts/routes/router.js"></script>
   <script src="scripts/models/company.js"></script>
   <script src="scripts/models/document.js"></script>
-  <script src="scripts/models/yahoo.js"></script>
+  <script src="scripts/collections/yahoo.js"></script>
   <script src="scripts/collections/companies.js"></script>
   <script src="scripts/collections/documents.js"></script>
   <script src="scripts/collections/prices.js"></script>
@@ -210,6 +223,7 @@
   <script src="scripts/views/query.js"></script>
   <script src="scripts/views/company.js"></script>
   <script src="scripts/views/landing.js"></script>
+  <script src="scripts/views/metrics.js"></script>
   <!-- endbuild -->
 
 </body>
