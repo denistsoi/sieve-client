@@ -131,7 +131,8 @@ Sieve.ChartView = Backbone.View.extend({
       format: 'json',
       company__ticker: this.ticker,
       offset: this.offset,
-      limit: this.limit
+      limit: this.limit,
+      order_by: '-date'
     });
     this.collection.fetch({ data: documentParams });
   },
@@ -150,13 +151,15 @@ Sieve.ChartView = Backbone.View.extend({
   color: function(str){
     str = str.toLowerCase();
     re = {
-      warning: /profit warning/,
+      warning: /profit warning|profit alert/,
       report: /annual report|interim report|announcement of results/,
       dividend: /dividend/,
       majorTrans: /takeover|acquisition|substantial|major transaction|major/,
       minorTrans: /discloseable transaction|discloseable/,
       buyback: /buyback/,
-      listing: /listing|wpip|web proof information pack|prospectus|stabilizing|global offering/
+      listing: /listing|wpip|web proof information pack|prospectus|stabilizing|global offering/,
+      halt: /trading halt/,
+      resumption: /resumption of trading/
     };
 
     if (str.match(re.warning) !== null){
@@ -173,6 +176,10 @@ Sieve.ChartView = Backbone.View.extend({
       return 'orange';
     } else if ( str.match(re.listing) !== null){
       return 'blue';
+    } else if ( str.match(re.halt) !== null){
+      return 'purple';
+    } else if ( str.match(re.resumption) !== null){
+      return 'lightblue';
     } else {
       return 'gray';
     }

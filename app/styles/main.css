@@ -88,7 +88,13 @@ hr {
   margin: 20px auto;
 }
 
+.legend-header {
+  padding-bottom: 5px;
+}
+
 .legend {
+  float: left;
+  display: block;
   padding: 8px;
   color: white;
 }
@@ -104,7 +110,9 @@ hr {
 .yellow { fill: #FFB733; background-color: #FFB733; }
 .orange { fill: #F57336; background-color: #F57336; }
 .blue { fill: #003056; background-color: #003056; }
-.gray { fill: rgb(238,238,238); background-color: rgb(238,238,238); }
+.purple { fill: rgb(46,9,39); background-color: rgb(46,9,39); }
+.lightblue { fill: rgb(161,232,217); background-color: rgb(161,232,217) }
+.gray { fill: rgb(238,238,238); fill-opacity: 50%; background-color: rgb(238,238,238); }
 
 .axis text {
   font: 10px sans-serif;

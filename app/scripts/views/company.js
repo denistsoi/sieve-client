@@ -95,7 +95,8 @@ Sieve.CompanyView = Backbone.View.extend({
       format: 'json',
       company__ticker: this.ticker,
       offset: this.offset,
-      limit: this.limit
+      limit: this.limit,
+      order_by: '-date'
     });
     this.collection.fetch({ data: documentParams });
   }
