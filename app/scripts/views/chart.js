@@ -215,17 +215,14 @@ Sieve.ChartView = Backbone.View.extend({
     var self = this;
 
     var displayAnno = function(data){
+      data = data.attributes;
+      console.log(data);
+      var raw = '{{ formatDate date }}: <a href="{{ url }}" target="_blank">{{ description }}</a>';
+      var template = Handlebars.compile(raw);
+      // var html = date + ': ' + '<a href="' + data.attributes.url +'" target="_blank">' + data.attributes.description + '</a>';
       d3.select("div.annotation")
-        .data([data])
-        .html("<p>" + data.attributes.description + "</p>")
+        .html( template(data))
         .attr("style","display:block");
-    };
-
-    var hideAnno = function(data){
-      d3.select("div.annotation")
-        .data([data])
-        .html("")
-        .attr("style","display:none");
     };
 
     this.chart.append("g")
@@ -240,8 +237,7 @@ Sieve.ChartView = Backbone.View.extend({
         .attr("y", 0)
         .attr("height", function(d) { return self.defaults.height; })
         .attr("width", 4)
-        .on("mouseover", displayAnno)
-        .on("mouseout", hideAnno);
+        .on("mouseover", displayAnno);
 
     this.chart.append("g")
         .attr("class", "x axis")
