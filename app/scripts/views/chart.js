@@ -15,6 +15,7 @@ Sieve.ChartView = Backbone.View.extend({
     this.ticker = opts.ticker;
     this.collection = opts.collection;
     this.company = opts.company;
+    this.yahoo = opts.yahoo;
     this.offset = 0;
     this.limit = 100;
 
@@ -22,19 +23,23 @@ Sieve.ChartView = Backbone.View.extend({
     this.fetchAll();
     this.done = {
       profile: false,
-      docs: false
+      docs: false,
+      ticks: false,
+      metrics: false
     };
 
     // events
     this.collection.on('sync', this.docsReturn, this);
     this.company.on('sync', this.profileReturn, this);
+    this.yahoo.on('ticks', this.ticksReturn, this);
+    this.yahoo.on('metrics', this.metricsReturn, this);
   },
 
   render: function(){
     if (this.done.profile && this.company.meta.total_count === 0){
       // if ticker does not exist, show not found
       this.$el.html( this.notFound({ ticker: this.ticker }) );
-    } else if (this.done.profile && this.done.docs){
+    } else if (this.done.profile && this.done.docs && this.done.ticks){
       // render template when data received
       var scope = {
         company: this.company.attributes[0],
@@ -44,7 +49,8 @@ Sieve.ChartView = Backbone.View.extend({
       console.log('ChartView: Rendering', scope);
       this.$el.html( this.template(scope) );
       this.prepareChart();
-      this.updateChart(this.collection.models);
+      this.updateChartAnnotations(this.collection.models);
+      this.updateStockPrice(this.yahoo.ticks);
     } else {
       // show spinner if retrieving data
       this.$el.html( this.spinner() );
@@ -63,6 +69,16 @@ Sieve.ChartView = Backbone.View.extend({
     console.log('ChartView: Document data received...');
     this.done.docs = true;
     this.render();
+  },
+
+  ticksReturn: function(){
+    console.log('ChartView: Received Yahoo ticks', this.yahoo.ticks);
+    this.done.ticks = true;
+    this.render();
+  },
+
+  metricsReturn: function(){
+    console.log('ChartView: Received Yahoo metrics', this.yahoo.metrics);
   },
 
   fetchAll: function(){
@@ -130,12 +146,10 @@ Sieve.ChartView = Backbone.View.extend({
 
   prepareChart: function(){
     console.log('ChartView: Prepping charts...');
+    var self = this;
 
     this.defaults.width = this.defaults.maxWidth - this.defaults.margin.left - this.defaults.margin.right;
     this.defaults.height = this.defaults.maxHeight - this.defaults.margin.top - this.defaults.margin.bottom;
-
-    // this.x = d3.scale.linear()
-    //   .range([0, this.defaults.width]);
 
     this.x = d3.time.scale()
       .range([0, this.defaults.width]);
@@ -158,15 +172,23 @@ Sieve.ChartView = Backbone.View.extend({
       .append("g")
         .attr("transform", "translate(" + this.defaults.margin.left + "," + this.defaults.margin.top + ")");
 
-    // date parsing
-    this.parseDate = d3.time.format("%Y-%m-%d").parse;
+    // line
+    this.line = d3.svg.line()
+      .x(function(d) { return self.x(d.date); })
+      .y(function(d) { return self.y(d.close); });
+
+    // chart - init line
+    this.chart.append("path")
+      .attr("class", "line");
   },
 
-  updateChart: function(data){
-    console.log('ChartView: Populating chart...', data);
+  updateChartAnnotations: function(data){
+    console.log('ChartView: Annotating chart...', data);
     var self = this;
     this.x.domain([
-      d3.min(data, function(d) { return Date.parse(d.attributes.date); }),
+      // d3.min(data, function(d) { return Date.parse(d.attributes.date); }),
+      // TODO: implement longer search history
+      Date.parse('2013-01-01'),
       d3.max(data, function(d) { return Date.parse(d.attributes.date); })
     ]);
     this.y.domain([0, d3.max(data, function(d) { return d.attributes.size; })]);
@@ -183,11 +205,37 @@ Sieve.ChartView = Backbone.View.extend({
     this.chart.selectAll(".bar")
         .data(data)
       .enter().append("rect")
+        .attr("class", "bar")
         .attr("class", function(d) { return self.color(d.attributes.description); })
         .attr("x", function(d) { return self.x(Date.parse(d.attributes.date)); })
         .attr("y", 1)
         .attr("height", function(d) { return self.defaults.height - 1; })
         .attr("width", 3);
+  },
+
+  updateStockPrice: function(data){
+    console.log('ChartView: Updating share prices...', data);
+    var self = this;
+    // process date and closing price
+    data.forEach(function(d) {
+      d.date = Date.parse(d.Date);
+      d.close = +d.Close;
+    });
+
+    // update y axis domain
+    this.y.domain(d3.extent(data, function(d) { return d.close; }));
+
+    // update x and y axis
+    this.chart.selectAll("g.x.axis")
+      .call(this.xAxis);
+
+    this.chart.selectAll("g.y.axis")
+      .call(this.yAxis);
+
+    // update line
+    this.chart.selectAll("path.line")
+      .datum(data)
+      .attr("d", self.line);
   }
 
 });

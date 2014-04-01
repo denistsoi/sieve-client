@@ -14,9 +14,13 @@ Sieve.Yahoo = Backbone.Model.extend({
       startDate: self.startDate,
       endDate: self.endDate
     }, 'historicaldata', function(err, data) {
-      console.log('Yahoo: Data returned...', data);
-      self.ticks = data.quote;
-      self.displayTicks();
+      console.log('Yahoo: Ticks returned...', data);
+      if (data && data.hasOwnProperty('quote')){
+        self.ticks = data.quote;
+        self.trigger('ticks', this);
+      } else {
+        self.trigger('ticksFailed', this);
+      }
     });
 
     // get current quotes
@@ -24,8 +28,12 @@ Sieve.Yahoo = Backbone.Model.extend({
       stock: opts.ticker
     }, 'quotes', function(err, data) {
       console.log('Yahoo: Metrics returned...', data);
-      self.metrics = data.quote;
-      self.displayMetrics();
+      if (data && data.hasOwnProperty('quote')){
+        self.metrics = data.quote;
+        self.trigger('metrics', this);
+      } else {
+        self.trigger('metricsFailed', this);
+      }
     });
   },
 
@@ -67,16 +75,6 @@ Sieve.Yahoo = Backbone.Model.extend({
       }
       complete(err, !err && data.query.results);
     });
-  },
-
-  // ready to display chart
-  displayTicks: function(){
-    this.trigger('ticksReady', this);
-  },
-
-  // ready to display metrics
-  displayMetrics: function(){
-    this.trigger('metricsReady', this);
   },
 
 });
