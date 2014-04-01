@@ -92,6 +92,16 @@ hr {
   padding-bottom: 5px;
 }
 
+.annotation {
+  position: absolute;
+  left: 25%;
+  width: 50%;
+  padding: 5px;
+  border: 1px solid rgb(200, 200, 235);
+  background: rgba(235, 235, 235, 0.5);
+  font-size: 12px;
+}
+
 .legend {
   float: left;
   display: block;
@@ -103,11 +113,12 @@ hr {
   color: black !important;
 }
 
-.darkgray { fill: rgb(150,150,150); background-color: rgb(150,150,150); }
+.pink { fill: #FF8598; background-color: #FF8598; }
 .red { fill: #C22121; background-color: #C22121; }
+.darkgray { fill: rgb(150,150,150); background-color: rgb(150,150,150); }
+.yellow { fill: #FFB733; background-color: #FFB733; }
 .green { fill: #047878; background-color: #047878; }
 .lightgreen { fill: #78AA00; background-color: #78AA00; }
-.yellow { fill: #FFB733; background-color: #FFB733; }
 .orange { fill: #F57336; background-color: #F57336; }
 .blue { fill: #003056; background-color: #003056; }
 .purple { fill: rgb(46,9,39); background-color: rgb(46,9,39); }
@@ -123,6 +134,14 @@ hr {
   fill: none;
   stroke: #000;
   shape-rendering: crispEdges;
+}
+
+text.annotation {
+  fill: black;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgb(235,235,235);
 }
 
 .line {

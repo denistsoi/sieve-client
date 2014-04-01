@@ -18,6 +18,7 @@ var helpers = {
   },
 
   formatMultiple: function(mult){
+    if (mult === null) return 'N/A';
     return Math.round(mult*10)/10 + 'x';
   },
 

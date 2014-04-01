@@ -145,44 +145,33 @@ Sieve.ChartView = Backbone.View.extend({
   defaults: {
     maxWidth: 960,
     maxHeight: 500,
-    margin: {top: 20, right: 50, bottom: 30, left: 50}
+    margin: {top: 30, right: 50, bottom: 30, left: 50}
   },
 
   color: function(str){
     str = str.toLowerCase();
-    re = {
-      warning: /profit warning|profit alert/,
-      report: /annual report|interim report|announcement of results|annual results|half yearly results/,
-      dividend: /dividend/,
-      majorTrans: /takeover|acquisition|substantial|major transaction|major/,
-      minorTrans: /discloseable transaction|discloseable/,
-      buyback: /buyback/,
-      listing: /listing|wpip|web proof information pack|prospectus|stabilizing|global offering/,
-      halt: /trading halt/,
-      resumption: /resumption of trading/
+
+    this.filters = {
+      positiveProfit: {re: /positive profit alert|positive profit warning/, color: 'pink', label:'Positive Profit'},
+      warning: {re: /profit warning|profit alert/, color: 'red', label: 'Profit Warning'},
+      report: {re: /annual report|interim report|announcement of results|annual results|half yearly results/, color: 'darkgray', label: 'Financial Reports'},
+      dividend: {re: /dividend/, color: 'yellow', label: 'Dividends'},
+      majorTrans: {re: /takeover|acquisition|substantial|major transaction|major/, color: 'green', label: 'Major Acquisitions'},
+      minorTrans: {re: /discloseable transaction|discloseable/, color: 'lightgreen', label: 'Minor Acquisitions'},
+      buyback: {re: /buyback/, color: 'orange', label: 'Share Buybacks'},
+      listing: {re: /listing|wpip|web proof information pack|prospectus|stabilizing|global offering/, color: 'blue', label: 'Capital Raising'},
+      halt: {re: /trading halt/, color: 'purple', label: 'Trading Halt'},
+      resumption: {re: /resumption of trading/, color: 'lightblue', label: 'Trading Resumption'},
+      others: {re: '', color: 'gray'}
     };
 
-    if (str.match(re.warning) !== null){
-      return 'red';
-    } else if (str.match(re.report) !== null){
-      return 'darkgray';
-    } else if ( str.match(re.dividend) !== null){
-      return 'yellow';
-    } else if ( str.match(re.majorTrans) !== null){
-      return 'green';
-    } else if ( str.match(re.minorTrans) !== null){
-      return 'lightgreen';
-    } else if ( str.match(re.buyback) !== null){
-      return 'orange';
-    } else if ( str.match(re.listing) !== null){
-      return 'blue';
-    } else if ( str.match(re.halt) !== null){
-      return 'purple';
-    } else if ( str.match(re.resumption) !== null){
-      return 'lightblue';
-    } else {
-      return 'gray';
+    for (var filter in this.filters){
+      if(str.match(this.filters[filter].re) !== null){
+        return this.filters[filter].color;
+      }
     }
+
+    return 'gray';
   },
 
   prepareChart: function(){
@@ -225,6 +214,20 @@ Sieve.ChartView = Backbone.View.extend({
     console.log('ChartView: Annotating chart...', data);
     var self = this;
 
+    var displayAnno = function(data){
+      d3.select("div.annotation")
+        .data([data])
+        .html("<p>" + data.attributes.description + "</p>")
+        .attr("style","display:block");
+    };
+
+    var hideAnno = function(data){
+      d3.select("div.annotation")
+        .data([data])
+        .html("")
+        .attr("style","display:none");
+    };
+
     this.chart.append("g")
         .attr("class", "bars");
 
@@ -236,7 +239,9 @@ Sieve.ChartView = Backbone.View.extend({
         .attr("x", function(d) { return self.x(Date.parse(d.attributes.date)); })
         .attr("y", 0)
         .attr("height", function(d) { return self.defaults.height; })
-        .attr("width", 3);
+        .attr("width", 4)
+        .on("mouseover", displayAnno)
+        .on("mouseout", hideAnno);
 
     this.chart.append("g")
         .attr("class", "x axis")

@@ -13,7 +13,7 @@
   <!-- build:css(.tmp) styles/main.css -->
   <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700,600' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Roboto:400italic,400,300,700,600' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
   <link rel="stylesheet" href="styles/main.css">
   <!-- endbuild -->
@@ -54,18 +54,20 @@
     <div class="clearfix"></div>
     <div class="legend-wrap container">
       <div class="legend-header">Legend:</div>
-      <span class="legend red">Profit Warnings</span>
-      <span class="legend darkgray">Annual / Interim Reports</span>
-      <span class="legend yellow">Dividends</span>
-      <span class="legend green">Major Acquisitions</span>
-      <span class="legend lightgreen">Minor Acquisitions</span>
-      <span class="legend orange">Share Buybacks</span>
+      <span class="legend red">Profit Warning</span>
+      <span class="legend pink">Positive Profit Alert</span>
+      <span class="legend darkgray">Financial Report</span>
+      <span class="legend yellow">Dividend</span>
+      <span class="legend green">Major Acquisition</span>
+      <span class="legend lightgreen">Minor Acquisition</span>
+      <span class="legend orange">Share Buyback</span>
       <span class="legend blue">Capital Raising / IPO</span>
       <span class="legend purple">Trading Halt</span>
       <span class="legend lightblue">Trading Resumption</span>
       <span class="legend dark gray">Other</span>
     </div>
     <div class="chart-wrap container">
+      <div class="annotation" style="display:none"></div>
       <svg class="chart"></svg>
     </div>
   </script>
