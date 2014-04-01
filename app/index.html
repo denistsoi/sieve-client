@@ -47,9 +47,11 @@
   <script type="text/x-handlebars-template" id="chartView">
     <div class="container">
       <div>
-        <h3>{{ company.full_name }} ({{ company.ticker }})</h3>
+        <h3><strong>{{ company.full_name }} ({{ company.ticker }})</strong></h3>
       </div>
     </div>
+    <div class="metrics-wrap container"></div>
+    <div class="clearfix"></div>
     <div class="legend-wrap container">
       <span>Legend:</span>
       <span class="legend red">Profit Warnings</span>
@@ -61,7 +63,6 @@
       <span class="legend blue">Capital Raising / IPO</span>
       <span class="legend dark gray">Other</span>
     </div>
-    <div class="metrics-wrap container"></div>
     <div class="chart-wrap container">
       <svg class="chart"></svg>
     </div>
@@ -69,21 +70,26 @@
 
   <!-- Metrics View -->
   <script type="text/x-handlebars-template" id="metricsView">
-    <h3>{{ LastTradePriceOnly }} | {{ Change }} ({{ ChangeinPercent }})</h3>
-    <div>Volume: {{ Volume }}</div>
-    <div>Market Cap: {{ MarketCapitalization }}</div>
-    <div>Price/LTM Earnings: {{ PERatio }}</div>
-    <div>Price/Book: {{ PriceBook }}</div>
-    <div>PEG: {{ PEGRatio }}</div>
-    <div>FY+0 EPS: {{ EPSEstimateCurrentYear }}</div>
-    <div>FY+1 EPS: {{ EPSEstimateNextYear }}</div>
+    <div><h3>
+      <span class="small">Price: </span> HK${{ LastTradePriceOnly }}
+      <span class="small" style="padding-left: 10px">Last Change:</span> {{ Change }} ({{ ChangeinPercent }})
+    </h3></div>
+    <hr>
+    <div class="col-md-2">Volume:</div>
+    <div class="col-md-4">{{ addCommas Volume }}</div>
+    <div class="col-md-2">Price/LTM Earnings:</div>
+    <div class="col-md-4">{{ formatMultiple PERatio }}</div>
+    <div class="col-md-2">Market Cap:</div>
+    <div class="col-md-4">{{ MarketCapitalization }}</div>
+    <div class="col-md-2">Price/Book:</div>
+    <div class="col-md-4">{{ formatMultiple PriceBook }}</div>
   </script>
 
   <!-- Company View -->
   <script type="text/x-handlebars-template" id="companyView">
     <div class="container">
       <div>
-        <h3>{{ company.full_name }} ({{ company.ticker }})</h3>
+        <h3><strong>{{ company.full_name }} ({{ company.ticker }})</strong></h3>
         <a href="{{ company.website }}">{{ company.website }}</a>
       </div>
 
@@ -222,7 +228,6 @@
   <script src="scripts/views/query.js"></script>
   <script src="scripts/views/company.js"></script>
   <script src="scripts/views/landing.js"></script>
-  <script src="scripts/views/metrics.js"></script>
   <!-- endbuild -->
 
 </body>

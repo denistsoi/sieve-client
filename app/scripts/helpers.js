@@ -17,6 +17,19 @@ var helpers = {
     return size.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,") + ' kb';
   },
 
+  formatMultiple: function(mult){
+    return Math.round(mult*10)/10 + 'x';
+  },
+
+  // UNUSED
+  formatPrice: function(country, price){
+    var prefix = {
+      HK: 'HK$',
+      US: 'US$'
+    };
+    return prefix.country + price;
+  },
+
   formatDate: function(date) {
     var now = moment();
     var d = moment(date);

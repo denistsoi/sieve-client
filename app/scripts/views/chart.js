@@ -57,7 +57,7 @@ Sieve.ChartView = Backbone.View.extend({
       console.log('ChartView: Rendering', scope);
       this.$el.html( this.template(scope) );
       this.prepareChart();
-      this.updateChartAnnotations(this.collection.models);
+      this.updateAnnotations(this.collection.models);
       if (this.done.ticks === 200) this.updateStockPrice(this.yahoo.ticks);
       if (this.done.metrics === 200) this.renderMetricsView();
     } else {
@@ -186,7 +186,8 @@ Sieve.ChartView = Backbone.View.extend({
     this.defaults.height = this.defaults.maxHeight - this.defaults.margin.top - this.defaults.margin.bottom;
 
     this.x = d3.time.scale()
-      .range([0, this.defaults.width]);
+      .range([0, this.defaults.width])
+      .domain([Date.parse('2013-01-01'), Date.now()]);
 
     this.y = d3.scale.linear()
       .range([this.defaults.height, 0]);
@@ -194,7 +195,7 @@ Sieve.ChartView = Backbone.View.extend({
     this.xAxis = d3.svg.axis()
       .scale(this.x)
       .orient("bottom")
-      .tickFormat(d3.time.format("%d %b %Y"));
+      .tickFormat(d3.time.format("%b %y"));
 
     this.yAxis = d3.svg.axis()
       .scale(this.y)
@@ -213,16 +214,22 @@ Sieve.ChartView = Backbone.View.extend({
 
   },
 
-  updateChartAnnotations: function(data){
+  updateAnnotations: function(data){
     console.log('ChartView: Annotating chart...', data);
     var self = this;
-    this.x.domain([
-      // d3.min(data, function(d) { return Date.parse(d.attributes.date); }),
-      // TODO: implement longer search history
-      Date.parse('2013-01-01'),
-      d3.max(data, function(d) { return Date.parse(d.attributes.date); })
-    ]);
-    this.y.domain([0, d3.max(data, function(d) { return d.attributes.size; })]);
+
+    this.chart.append("g")
+        .attr("class", "bars");
+
+    this.chart.select("g.bars").selectAll(".bar")
+        .data(data)
+      .enter().append("rect")
+        .attr("class", "bar")
+        .attr("class", function(d) { return self.color(d.attributes.description); })
+        .attr("x", function(d) { return self.x(Date.parse(d.attributes.date)); })
+        .attr("y", 0)
+        .attr("height", function(d) { return self.defaults.height; })
+        .attr("width", 3);
 
     this.chart.append("g")
         .attr("class", "x axis")
@@ -238,19 +245,6 @@ Sieve.ChartView = Backbone.View.extend({
           .attr("dy", ".71em")
           .style("text-anchor", "end")
           .text("Price (HK$)");
-
-    this.chart.append("g")
-        .attr("class", "bars");
-
-    this.chart.select("g.bars").selectAll(".bar")
-        .data(data)
-      .enter().append("rect")
-        .attr("class", "bar")
-        .attr("class", function(d) { return self.color(d.attributes.description); })
-        .attr("x", function(d) { return self.x(Date.parse(d.attributes.date)); })
-        .attr("y", 1)
-        .attr("height", function(d) { return self.defaults.height - 1; })
-        .attr("width", 3);
   },
 
   updateStockPrice: function(data){

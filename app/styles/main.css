@@ -349,6 +349,14 @@ hr {
   padding-right: 10px;
 }
 
+/* Metrics view wrap */
+.metrics-wrap {
+  background-color: rgb(235,235,235);
+  padding-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
 /* Filter bar wrap */
 
 #filter-bar {
