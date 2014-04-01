@@ -152,7 +152,7 @@ Sieve.ChartView = Backbone.View.extend({
     str = str.toLowerCase();
     re = {
       warning: /profit warning|profit alert/,
-      report: /annual report|interim report|announcement of results/,
+      report: /annual report|interim report|announcement of results|annual results|half yearly results/,
       dividend: /dividend/,
       majorTrans: /takeover|acquisition|substantial|major transaction|major/,
       minorTrans: /discloseable transaction|discloseable/,
