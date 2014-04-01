@@ -1,6 +1,7 @@
 'use strict';
 var LIVERELOAD_PORT = 35729;
-var SERVER_PORT = 9000;
+var SERVER_HOSTNAME = process.env.HOSTNAME || 'localhost';
+var SERVER_PORT = process.env.SIEVE_CLIENT_PORT || 9000;
 var lrSnippet = require('connect-livereload')({port: LIVERELOAD_PORT});
 var mountFolder = function (connect, dir) {
     return connect.static(require('path').resolve(dir));
@@ -68,7 +69,7 @@ module.exports = function (grunt) {
             options: {
                 port: SERVER_PORT,
                 // change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
+                hostname: SERVER_HOSTNAME
             },
             livereload: {
                 options: {
@@ -106,7 +107,7 @@ module.exports = function (grunt) {
         },
         open: {
             server: {
-                path: 'http://localhost:<%= connect.options.port %>'
+                path: 'http://<%=connect.options.hostname%>:<%= connect.options.port %>'
             },
             test: {
                 path: 'http://localhost:<%= connect.test.options.port %>'
@@ -303,7 +304,7 @@ module.exports = function (grunt) {
                 'mocha',
                 'watch:test'
             ];
-            
+
         if(!isConnected) {
             return grunt.task.run(testTasks);
         } else {
