@@ -251,6 +251,11 @@ text.annotation {
   border: solid #ccc 1px;
 }
 
+.query-msg {
+  padding-left: 3px;
+  font-style: italic;
+}
+
 .query-view a {
   padding-left: 0px;
   margin-left: 0px;

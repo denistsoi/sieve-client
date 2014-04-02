@@ -12,11 +12,37 @@
     'submit': 'submit'
   },
 
+  // converts 1 --> 0001.HK
+  // converts 1.HK --> 0001.HK
+  parseQuery: function(query){
+    var addZeros = function(num){
+      var str = num.toString();
+      var len = str.length;
+      if (len >= 4) return num;
+      for (var i = 0; i < 4 - len; i++){
+        str = '0' + str;
+      }
+      return str;
+    };
+
+    var num = parseInt(query);
+    if (num){
+      return addZeros(num) + '.HK';
+    } else {
+      return false;
+    }
+  },
+
   submit: function(e) {
     e.preventDefault();
     var query = $('input.tt-input').val();
-    window.router.navigate('list/company/' + query, {trigger: true});
-    console.log('QueryView submit:', query);
+    ticker = this.parseQuery(query);
+    if (ticker){
+      window.router.navigate('list/company/' + ticker, {trigger: true});
+      console.log('QueryView submit:', ticker);
+    } else {
+      this.$el.find('.query-msg').text("Invalid ticker");
+    }
   },
 
   render: function() {
@@ -31,13 +57,6 @@
     });
 
     companies.initialize();
-
-    // function (query, process) {
-    //   return $.get('http://jyek.cloudapp.net:3002/api/v1/company/', { query: query, format: 'json', obj_only: 'true' }, function (data) {
-    //     console.log(data);
-    //     return process(data);
-    //   });
-    // }
 
     // add autocomplete features
     this.$el.find('.typeahead').typeahead({
