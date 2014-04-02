@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Sieve - Search Engine for Listed Company Filings</title>
+  <title>Sieve - Search Engine for HKSE Listed Companies</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
@@ -29,7 +29,7 @@
   <!-- App View -->
   <script type="text/x-handlebars-template" id="appView">
     <div class="content-view"></div>
-    <div class="footer-view"></div>
+    <div class="footer-view centered"></div>
   </script>
 
   <!-- Top Bar View -->
@@ -152,7 +152,7 @@
   <script type="text/x-handlebars-template" id="queryView">
     <form class="query-form form-inline" role="form">
       <div class="form-group">
-        <input class="typeahead" type="text" placeholder="Enter ticker..." />
+        <input class="typeahead" name="companies" type="text" placeholder="Enter ticker... (e.g. 0001.HK)" />
       </div>
       <button class="btn btn-typeahead btn-fixed" type="submit"><i class="fa fa-search"></i></button>
     </form>
@@ -168,19 +168,20 @@
 
   <!-- Landing View -->
   <script type="text/x-handlebars-template" id="landingView">
-    <div class="hero">
-      <div class="container centered">
-        <img src="images/logo-v1.png"></img>
-        <h1>SIEVE</h1>
-        <h3>A search engine for listed company filings.</h3>
-        <br>
-      </div>
-    </div>
     <div class="github-fork-ribbon-wrapper right" style="pointer-events: none;">
       <div class="github-fork-ribbon">
         <a href="http://www.hackreactor.com" target="_blank" style="pointer-events: all;">Made at Hack Reactor</a>
       </div>
     </div>
+    <div class="hero">
+      <div class="container centered">
+        <img src="images/logo-v1.png"></img>
+        <h1>SIEVE</h1>
+        <h3>A search engine for HKSE listed companies</h3>
+        <br>
+      </div>
+    </div>
+    <div class="query-wrap centered"></div>
   </script>
 
   <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -198,7 +199,7 @@
   <script src="bower_components/underscore/underscore.js"></script>
   <script src="bower_components/backbone/backbone.js"></script>
   <script src="bower_components/d3/d3.js"></script>
-  <script src="bower_components/typeahead.js/dist/typeahead.jquery.js"></script>
+  <script src="bower_components/typeahead.js/dist/typeahead.bundle.min.js"></script>
   <script src="bower_components/handlebars/handlebars.js"></script>
   <script src="bower_components/moment/moment.js"></script>
   <!-- endbuild -->

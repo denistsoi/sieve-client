@@ -241,7 +241,7 @@ text.annotation {
   line-height: 20px;
 }
 
-.query-view .tt-suggestion:hover {
+.query-view .tt-suggestion:hover, .query-view .tt-cursor {
   background-color: #ccc;
 }
 

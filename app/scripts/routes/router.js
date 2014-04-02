@@ -15,8 +15,7 @@ Sieve.Router = Backbone.Router.extend({
     console.log('Router: LandingView');
     this.$el.empty();
     this.$el.append(new Sieve.LandingView().render().el);
-    $container = $('<div class="container centered"></div>');
-    this.$el.append($container.append(new Sieve.QueryView().render().el));
+    this.$el.find('.query-wrap').append(new Sieve.QueryView().el);
     $('body').addClass('bg-weave');
   },
 
