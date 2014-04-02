@@ -31,6 +31,24 @@ Sieve.Router = Backbone.Router.extend({
     $('body').removeClass('bg-weave');
   },
 
+  // parseTicker: function(ticker){
+  //   if (ticker.match(/.*?.HK/)){
+  //     var prefix = ticker.match(/(.*?).[hH?][kK?]/);
+  //     if ( parseInt(prefix) ){
+  //       if (prefix.length >= 4) {
+  //         return ticker;
+  //       } else {
+  //         var len = prefix.length;
+  //         for (var i = 0; i < 4 - len; i++){
+
+  //         }
+  //       }
+
+  //     }
+
+  //   }
+  // },
+
   chart: function(ticker){
     console.log('Router: CompanyView', ticker);
     this.$el.empty();
