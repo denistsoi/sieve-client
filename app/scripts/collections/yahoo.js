@@ -3,7 +3,7 @@ Sieve.Yahoo = Backbone.Model.extend({
     var self = this;
     self.ticker = opts.ticker;
 
-    self.startDate = moment('2013-01-01').format('YYYY-MM-DD');
+    self.startDate = moment().subtract('months', 15).format('YYYY-MM-DD');
     self.endDate = moment().format('YYYY-MM-DD');
 
     console.log('Yahoo: Fetching data for', self.ticker);

@@ -184,7 +184,7 @@ Sieve.ChartView = Backbone.View.extend({
 
     this.x = d3.time.scale()
       .range([0, this.defaults.width])
-      .domain([Date.parse('2013-01-01'), Date.now()]);
+      .domain([Date.parse(moment().subtract('months', 15).format('YYYY-MM-DD')), Date.now()]);
 
     this.y = d3.scale.linear()
       .range([this.defaults.height, 0]);
